@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+import mlflow
+import mlflow.sklearn
 
 # This function code the dataset classes in the 3 categories, 
 # creating a list
@@ -34,6 +36,10 @@ def standardize_dataset(df):
 
 
 def _PCA(df, targets, COMPONENTS=47):
+	
+	mlflow.log_param("COMPONENTS",COMPONENTS)# log of parameters
+
+
 	X = pd.DataFrame(StandardScaler().fit_transform(df))
 	X.head()
 	pca = PCA(n_components=COMPONENTS)
@@ -47,14 +53,33 @@ def _PCA(df, targets, COMPONENTS=47):
 	targets = pd.DataFrame(targets)
 	targets = targets.rename(columns={0:"targets"})
 	finalDf = pd.concat([principalDf, targets], axis = 1)
-	return finalDf
 
+	variance=np.round(pca.explained_variance_ratio_* 100, decimals =2)[:20]
+	print(variance)
+	
+	mlflow.log_metric("variance_pc1",variance[1])# log of metric
+	mlflow.log_metric("variance_pc2",variance[2])# log of metric
+	mlflow.log_metric("variance_pc2",variance[3])# log of metric
+
+
+
+	return finalDf
 
 
 
 data = read_dataT()
 y = get_target_classes(data)
+
 data_S = standardize_dataset(data)
 
+
 PCs = _PCA(data_S, y)
-print(PCs.head())
+
+#print(PCs.head())
+
+#mlflow.log_metric("PCs",PCs.head())# log of parameters
+
+
+
+# after the run of the script, lunch 'mlflow ui' command 
+# and go 'to http://localhost:5000' to see the ui
