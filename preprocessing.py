@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
-
+# This function code the dataset classes in the 3 categories, 
+# creating a list
 def get_target_classes(col):
 	y = []
 	c = data.iloc[:, 0]
