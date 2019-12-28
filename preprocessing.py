@@ -56,5 +56,4 @@ y = get_target_classes(data)
 data_S = standardize_dataset(data)
 
 PCs = _PCA(data_S, y)
-print("hey")
 print(PCs.head())
