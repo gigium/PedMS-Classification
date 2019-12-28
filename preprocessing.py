@@ -77,8 +77,6 @@ PCs = _PCA(data_S, y)
 
 #print(PCs.head())
 
-#mlflow.log_metric("PCs",PCs.head())# log of parameters
-
 
 
 # after the run of the script, lunch 'mlflow ui' command 
