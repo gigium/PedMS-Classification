@@ -33,10 +33,9 @@ def main():
 	data = read_dataT(sys.argv[1])
 	y = get_target_classes(data)
 	data_S = standardize_dataset(data)
-	targets = pd.DataFrame(y).rename(columns={0:"targets"}, inplace=True)
-	final_data = pd.concat([data_S, targets], axis = 1)
-	print(final_data.head())
-	final_data.to_csv(sys.argv[2], sep="\t")
+	data_S["target"] = y
+
+	data_S.to_csv(sys.argv[2], sep="\t")
 
  
 # python preprocessing.py .\data\longRNA_NGS.txt .\data\new_data.txt
