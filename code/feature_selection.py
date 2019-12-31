@@ -68,6 +68,7 @@ def decisionTreeFSelect(df ,k):
 	# plt.show()
 
 
+
 #returns only features with a score greater than 0
 # it can be done selecting the first k features
 def lassoFSelect(df):
@@ -86,8 +87,27 @@ def lassoFSelect(df):
 	return df[keep]
 
 
+
+def correlationFElimination(df, c):
+	X = df.iloc[:,:-1]  
+	correlation_matrix = X.corr()
+	correlated_features = set()	
+
+	for i in range(len(correlation_matrix.columns)):
+		print(i, "/", len(correlation_matrix.columns))
+		for j in range(i):
+			if abs(correlation_matrix.iloc[i, j]) > c:
+				colname = correlation_matrix.columns[i]
+				correlated_features.add(colname)
+
+	return df.drop(correlated_features, axis=1)
+
+
+
+
 def main():
 	data = read_data(sys.argv[1])
+	print(correlationFElimination((decisionTreeFSelect(data, 10000)), 0.7).head())
 	#TODO
 
  
