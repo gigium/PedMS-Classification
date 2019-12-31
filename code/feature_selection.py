@@ -49,12 +49,8 @@ def univariateFSelect(df ,k, score_func=chi2):
 	featureScores.columns = ['Gene','Score']
 
 	keep = list (featureScores.nlargest(k,'Score')['Gene'])
-	df1 = pd.DataFrame()
-
-	for c in keep:
-		df1[c] = df[c]
 	
-	return df1
+	return df[keep]
 
 
 
@@ -66,12 +62,8 @@ def decisionTreeFSelect(df ,k):
 	feat_importances = pd.Series(model.feature_importances_, index=X.columns)
 	
 	keep = list (feat_importances.nlargest(k).index)
-	df1 = pd.DataFrame()
 
-	for c in keep:
-		df1[c] = df[c]
-	
-	return df1
+	return df[keep]
 	# feat_importances.nlargest(30).plot(kind='barh')
 	# plt.show()
 
@@ -91,16 +83,12 @@ def lassoFSelect(df):
 		if coef[i] > 0:
 			keep.append(indexes[i])
 	
-	df1 = pd.DataFrame()
-	for c in keep:
-		df1[c] = df[c]
-
-	return df1
-
+	return df[keep]
 
 
 def main():
 	data = read_data(sys.argv[1])
+	#TODO
 
  
 # python feature_selection.py .\data\new_data.txt
