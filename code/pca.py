@@ -1,16 +1,21 @@
 import pandas as pd
 import numpy as np
+import sys
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
 
-def _PCA(df, targets, COMPONENTS=47):
-    
-    #mlflow.log_param("COMPONENTS",COMPONENTS)# log of parameters
+
+def read_data(file_name):
+    df = pd.read_csv(file_name, sep="\t", index_col=0)
+    return df
 
 
-    X = pd.DataFrame(StandardScaler().fit_transform(df))
-    X.head()
+
+def _PCA(df, COMPONENTS=47):
+    x, y = df.iloc[:,:-1], df.iloc[:, -1] 
+    X = pd.DataFrame(StandardScaler().fit_transform(x))
+
     pca = PCA(n_components=COMPONENTS)
     principalComponents = pca.fit_transform(X)
 
@@ -19,10 +24,20 @@ def _PCA(df, targets, COMPONENTS=47):
         columns.append("PC"+str(i+1))
 
     principalDf = pd.DataFrame(data = principalComponents, columns=columns)
-    targets = pd.DataFrame(targets)
-    targets = targets.rename(columns={0:"targets"})
-    finalDf = pd.concat([principalDf, targets], axis = 1)
+    l = list(range(1, len(principalDf.columns)+1))
+    principalDf["index"] = l
+    principalDf.set_index("index", inplace=True)
 
-    variance=np.round(pca.explained_variance_ratio_* 100, decimals =2)[:20]
-    print(variance)
+    principalDf["target"] = y
+    return principalDf
     
+
+
+def main():
+    data = read_data(sys.argv[1])
+    _PCA(data).to_csv(sys.argv[2], sep="\t")
+
+ 
+# python pca.py .\data\new_data.txt .\data\pca_data.txt
+if __name__== "__main__":
+  main()
