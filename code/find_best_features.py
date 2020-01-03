@@ -8,21 +8,18 @@ from feature_selection import lowVarianceElimination, correlationFElimination, r
 
 def main():
 	data = read_data(sys.argv[1])
-	d = lowVarianceElimination(data, 0.95)
-	d1 = correlationFElimination(d, 0.8)
-	print(d1.head())
-	# mlflow.set_experiment("lowVarianceElimination")
-	# k = 0
-	# while k < 1:
-	# 	mlflow.log_param("treshold", k)
-	# 	d = lowVarianceElimination(data, k)
-	# 	var = np.mean(d.var(axis=1))
+	mlflow.set_experiment("variance_decision")
+	k=0
+	while(k<1):
+		print(k) 
+		d = lowVarianceElimination(data,k)
+		row, columns=d.shape
+		mlflow.log_metric("k",k)
+		mlflow.log_metric("columns",columns)
+		k+=0.05
 
-	# 	mlflow.log_metric("treshold", k)
-	# 	data_amnt = len(d.columns)*len(d.index)
-	# 	mlflow.log_metric("variance", var)
-	# 	mlflow.log_metric("cols", len(d.columns))
-	# 	k+= 0.05
+	
+
 
 
 # after the run of the script, lunch 'mlflow ui' command 

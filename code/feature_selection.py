@@ -14,13 +14,13 @@ def read_data(file_name):
 	return df
 
 
-
+#preliminar step
 def lowMeanElimination(df, mean_tresh):
 	keep = (df > 0).mean() > mean_tresh
 	return df[df.columns[keep]]
 	
 
-
+#preliminar step
 def lowVarianceElimination(df, var_tresh):
 	X = df.iloc[:,:-1] 
 	sel_variance_threshold = VarianceThreshold(var_tresh) 
