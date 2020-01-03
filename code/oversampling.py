@@ -12,10 +12,10 @@ def randomOverSampling(df):
 
 
 
-def SMOTEOverSampling(df):
+def SMOTEOverSampling(df, neighbors=2):
 	X = df.iloc[:,:-1]  
 	y = df.iloc[:,-1]  
-	ros = SMOTE(random_state=0)
+	ros = SMOTE(random_state=0, k_neighbors=neighbors)
 	X_resampled, y_resampled = ros.fit_resample(X, y)
 	X_resampled['target'] = y_resampled
 	return X_resampled 

@@ -24,7 +24,9 @@ def lowMeanElimination(df, mean_tresh):
 def lowVarianceElimination(df, var_tresh):
 	X = df.iloc[:,:-1] 
 	sel_variance_threshold = VarianceThreshold(var_tresh) 
-	return pd.DataFrame(sel_variance_threshold.fit_transform(X))
+	finalDf = pd.DataFrame(sel_variance_threshold.fit_transform(X))
+	finalDf["target"] = df["target"]
+	return finalDf
 
 
 
