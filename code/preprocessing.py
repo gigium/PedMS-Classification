@@ -43,11 +43,4 @@ if __name__== "__main__":
   main()
 
 
-#mlflow.log_metric("variance_pc1",variance[1])# log of metric
-#mlflow.log_metric("variance_pc2",variance[2])# log of metric
-#mlflow.log_metric("variance_pc2",variance[3])# log of metric
 
-
-
-# after the run of the script, lunch 'mlflow ui' command 
-# and go 'to http://localhost:5000' to see the ui
