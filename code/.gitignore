@@ -1,4 +1,5 @@
 /longRNA_NGS.txt
 /data
-/mlruns
+/mlrun
 /kFold
+/__pycache

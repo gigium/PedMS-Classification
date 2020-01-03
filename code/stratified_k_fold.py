@@ -10,6 +10,8 @@ def read_data(file_name):
 	df = pd.read_csv(file_name, sep="\t", index_col=0)
 	return df
 
+
+
 def stratifiedKfold(df, k=5):
 	# target and data selection
 	y=df.iloc[:,-1]
