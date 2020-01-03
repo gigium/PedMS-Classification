@@ -28,6 +28,23 @@ def lowVarianceElimination(df, var_tresh):
 
 
 
+def correlationFElimination(df, c):
+	X = df.iloc[:,:-1]  
+	correlation_matrix = X.corr()
+	correlated_features = set()	
+
+	for i in range(len(correlation_matrix.columns)):
+		print(i, "/", len(correlation_matrix.columns))
+		for j in range(i):
+			if abs(correlation_matrix.iloc[i, j]) > c:
+				colname = correlation_matrix.columns[i]
+				correlated_features.add(colname)
+
+	return df.drop(correlated_features, axis=1)
+
+
+
+
 def univariateFSelect(df ,k, score_func=chi2):
 	X = df.iloc[:,:-1]  
 	y = df.iloc[:,-1]    
@@ -64,7 +81,7 @@ def decisionTreeFSelect(df ,k):
 
 
 
-#returns only features with a score greater than 0
+# returns only features with a score greater than 0
 # it can be done selecting the first k features
 def lassoFSelect(df):
 	X = df.iloc[:,:-1]  
@@ -80,23 +97,3 @@ def lassoFSelect(df):
 			keep.append(indexes[i])
 	
 	return df[keep]
-
-
-
-def correlationFElimination(df, c):
-	X = df.iloc[:,:-1]  
-	correlation_matrix = X.corr()
-	correlated_features = set()	
-
-	for i in range(len(correlation_matrix.columns)):
-		print(i, "/", len(correlation_matrix.columns))
-		for j in range(i):
-			if abs(correlation_matrix.iloc[i, j]) > c:
-				colname = correlation_matrix.columns[i]
-				correlated_features.add(colname)
-
-	return df.drop(correlated_features, axis=1)
-
-
-
-

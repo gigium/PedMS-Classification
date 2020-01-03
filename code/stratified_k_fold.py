@@ -1,7 +1,6 @@
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
 import pandas as pd
-
 import sys
 
 
@@ -9,6 +8,8 @@ import sys
 def read_data(file_name):
 	df = pd.read_csv(file_name, sep="\t", index_col=0)
 	return df
+
+
 
 def stratifiedKfold(df, k=5):
 	# target and data selection
@@ -29,6 +30,8 @@ def stratifiedKfold(df, k=5):
 	    split["test"].append(test_index)
 	
 	return split
+
+
 
 def main():
 	data = read_data(sys.argv[1])
