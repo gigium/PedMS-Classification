@@ -110,7 +110,7 @@ def decisionTreeFSelect(df ,k):
 
 
 # https://stats.stackexchange.com/questions/367155/why-lasso-for-feature-selection
-def lassoFSelect(df, cv, alphas):
+def lassoFSelect(df, cv=5, alphas=[.1]):
 	print("lassoFSelect ...")
 
 	X = df.iloc[:,:-1]  
