@@ -5,18 +5,15 @@ from feature_selection import read_data
 
 
 from sklearn import svm
-from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+
 
 from sklearn.metrics import classification_report, confusion_matrix
 
 import warnings
 
-
-
-def svm(train,test,kernel='rbf'):
-	print("svm ... ")
-	print("kernel function : ", kernel)
+def split(train,test):
 
 	y_train=train.iloc[:,-1]
 	X_train=train.iloc[:,:-1]
@@ -24,24 +21,42 @@ def svm(train,test,kernel='rbf'):
 	y_test=test.iloc[:,-1]
 	X_test=test.iloc[:,:-1]
 
+	return X_train, y_train, X_test, y_test
 
+def reporter(y_test,y_pred):
+	with warnings.catch_warnings():
+		# ignore all caught warnings
+		warnings.filterwarnings("ignore")
+		report = classification_report(y_test,y_pred)	
+
+	return report
+
+def svm(train,test,kernel='rbf'):
+	print("svm ... ")
+	print("kernel function : ", kernel)
+
+	X_train, y_train, X_test, y_test = split(train,test)
 
 	svclassifier = SVC(kernel='rbf')
 	svclassifier.fit(X_train, y_train)
 
 	y_pred = svclassifier.predict(X_test)
 
-	with warnings.catch_warnings():
-		# ignore all caught warnings
-		warnings.filterwarnings("ignore")
-		report = classification_report(y_test,y_pred)
 	
-	return report
+	return reporter(y_test,y_pred)
 
 
+def decision_tree(train,test):
+	print("decision_tree ... ")
 
+	X_train, y_train, X_test, y_test = split(train,test)
 
-# python classification.py
+	classifier = DecisionTreeClassifier()
+	classifier.fit(X_train, y_train)	
+
+	y_pred = classifier.predict(X_test)
+
+	return reporter(y_test,y_pred)
 
 
 

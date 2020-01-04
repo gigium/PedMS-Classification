@@ -7,7 +7,7 @@ from feature_selection import (recursiveFElimination, lassoFSelect,
 								 read_data, 
 								 lowMeanElimination, lowVarianceElimination)
 from oversampling import randomOverSampling, SMOTEOverSampling
-from classification import svm
+from classification import svm, decision_tree
 
 
 from sklearn import  linear_model
