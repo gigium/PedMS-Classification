@@ -34,8 +34,7 @@ def main():
 		test = test[keep]
 		print("test classes ", sorted(Counter(test["target"]).items()))
 		
-		report=svm(train,test)
-		print(report)
+		svm(train,test)
 
 
 # after the run of the script, lunch 'mlflow ui' command 

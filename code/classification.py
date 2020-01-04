@@ -41,9 +41,9 @@ def svm(train,test,kernel='rbf'):
 	svclassifier.fit(X_train, y_train)
 
 	y_pred = svclassifier.predict(X_test)
-
 	
-	return reporter(y_test,y_pred)
+	report = reporter(y_test,y_pred)
+	print(report)
 
 
 def decision_tree(train,test):
@@ -56,8 +56,8 @@ def decision_tree(train,test):
 
 	y_pred = classifier.predict(X_test)
 
-	return reporter(y_test,y_pred)
-
+	report = reporter(y_test,y_pred)
+	print(report)
 
 
 
