@@ -5,7 +5,7 @@ import mlflow.sklearn
 
 from feature_selection import recursiveFElimination, lassoFSelect, read_data
 from oversampling import randomOverSampling, SMOTEOverSampling
-
+from classification import svm
 
 
 from sklearn import  linear_model
@@ -16,9 +16,8 @@ def main():
 	
 	train = read_data("./kFold/train_"+str(1)+".txt")
 	test = read_data("./kFold/test_"+str(1)+".txt")
-	train_oversampled = randomOverSampling(train)
-	# print(train_oversampled.head())
-	trainFinal = recursiveFElimination(train_oversampled.iloc[:, -10:])
+	report=svm(train,test)
+	print(report)
 
 
 # after the run of the script, lunch 'mlflow ui' command 

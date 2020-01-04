@@ -10,9 +10,14 @@ from sklearn.svm import SVC
 
 from sklearn.metrics import classification_report, confusion_matrix
 
+import warnings
+
 
 
 def svm(train,test,kernel='rbf'):
+	print("svm ... ")
+	print("kernel function : ", kernel)
+
 	y_train=train.iloc[:,-1]
 	X_train=train.iloc[:,:-1]
 
@@ -26,21 +31,15 @@ def svm(train,test,kernel='rbf'):
 
 	y_pred = svclassifier.predict(X_test)
 
-	return classification_report(y_test,y_pred)
+	with warnings.catch_warnings():
+		# ignore all caught warnings
+		warnings.filterwarnings("ignore")
+		report = classification_report(y_test,y_pred)
+	
+	return report
 
 
 
-
-def main():
-	train = read_data("./kFold/train_"+str(1)+".txt")
-	test = read_data("./kFold/test_"+str(1)+".txt")
-
-	report=svm(train,test)
-
-	print(report)
-
-if __name__ == '__main__':
-	main()
 
 # python classification.py
 
