@@ -5,7 +5,7 @@ import mlflow.sklearn
 
 from feature_selection import recursiveFElimination, lassoFSelect, read_data
 from oversampling import randomOverSampling, SMOTEOverSampling
-from classification import svm
+from classification import svm, decision_tree
 
 
 from sklearn import  linear_model
@@ -16,8 +16,12 @@ def main():
 	
 	train = read_data("./kFold/train_"+str(1)+".txt")
 	test = read_data("./kFold/test_"+str(1)+".txt")
-	report=svm(train,test)
-	print(report)
+	report_svm=svm(train,test)
+	report_decision_tree=decision_tree(train,test)
+	print("report_svm ....\n", report_svm )
+	print("report_decision_tree ....\n", report_decision_tree )
+
+
 
 
 # after the run of the script, lunch 'mlflow ui' command 
