@@ -1,6 +1,7 @@
 from imblearn.over_sampling import RandomOverSampler,SMOTE
 import pandas as pd
 from collections import Counter
+import mlflow
 
 
 def randomOverSampling(df):
@@ -13,6 +14,9 @@ def randomOverSampling(df):
 	print("random oversampling ... ")
 	print("from ... ", sorted(Counter(df["target"]).items()))
 	print("to ... ", sorted(Counter(y_resampled).items()))
+
+	mlflow.log_param("OVERSAMPLING-RANDOM classes resampled", sorted(Counter(y_resampled).items()))
+
 	return X_resampled 
 
 
@@ -27,4 +31,7 @@ def SMOTEOverSampling(df, neighbors=2):
 	print("SMOTE oversampling ... ")
 	print("from ... ", sorted(Counter(df["target"]).items()))
 	print("to ... ", sorted(Counter(y_resampled).items()))
+
+	mlflow.log_param("OVERSAMPLING-SMOTE classes resampled", sorted(Counter(y_resampled).items()))
+
 	return X_resampled 

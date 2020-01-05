@@ -30,6 +30,9 @@ def split(train,test):
 	print("\n")
 	print("train classes ", sorted(Counter(y_train).items()))
 	print("test classes ", sorted(Counter(y_test).items()))
+	mlflow.log_param("train classes", sorted(Counter(y_train).items()))
+	mlflow.log_param("test classes", sorted(Counter(y_test).items()))
+
 	return X_train, y_train, X_test, y_test
 
 
@@ -52,6 +55,8 @@ def svm(train,test,kernel='rbf'):
 	print("svm ... ")
 	print("kernel function : ", kernel)
 
+	mlflow.log_param("CLASSIFICATION-SVM kernel function", kernel)
+	
 	X_train, y_train, X_test, y_test = split(train,test)
 
 	svclassifier = SVC(kernel='rbf')
@@ -93,6 +98,9 @@ def feedForwardNN(train, test,
 
 	print("loss function : ", lossF)
 	print("optimizer function : ", optimizerF)
+
+	mlflow.log_param("CLASSIFICATION-NN loss function", lossF)
+	mlflow.log_param("CLASSIFICATION-NN optimizer function", optimizerF)
 
 	X_train, y_train, X_test, y_test = split(train,test)
 

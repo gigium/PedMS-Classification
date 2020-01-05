@@ -15,6 +15,8 @@ from sklearn.feature_selection import RFECV
 
 import warnings
 
+import mlflow
+
 
 def read_data(file_name):
 	print("reading data ... reading from ", file_name)
@@ -31,6 +33,9 @@ def lowMeanElimination(df, mean_tresh):
 	keep['target'] = True
 	cols = df.columns[keep]
 	print("removed ... ", str(c-len(cols))+ " features")
+
+	mlflow.log_param("FEATURE SELECTION-LOW MEAN mean treshold", mean_tresh)
+	mlflow.log_param("FEATURE SELECTION-LOW MEAN removed features", (c-len(cols)))
 	return cols
 	
 
@@ -46,8 +51,10 @@ def lowVarianceElimination(df, var_tresh):
 
 	keep = sel_variance_threshold.get_support(indices=True)
 	cols = df.columns[keep].insert(len(keep), "target")
-	print("removed ... ", str(c-len(keep))+ " features")	
+	print("removed ... ", str(c-len(keep))+ " features")
 
+	mlflow.log_param("FEATURE SELECTION-LOW VARIANCE variance treshold", var_tresh)
+	mlflow.log_param("FEATURE SELECTION-LOW VARIANCE removed features", (c-len(keep)))
 	return cols
 
 
@@ -89,7 +96,12 @@ def univariateFSelect(df ,k, score_func=chi2):
 	featureScores.columns = ['Gene','Score']
 
 	keep = list (featureScores.nlargest(k,'Score')['Gene'])
+
+	mlflow.log_param("FEATURE SELECTION-UNIVARIATE score function", score_func.__name__)
+	mlflow.log_param("FEATURE SELECTION-UNIVARIATE k features", k)
+
 	keep.append("target")
+
 	return keep
 
 
@@ -107,6 +119,7 @@ def decisionTreeFSelect(df ,k):
 	keep = list (feat_importances.nlargest(k).index)
 	keep.append("target")
 
+	mlflow.log_param("FEATURE SELECTION-DECISION TREE k features", k)
 	return keep
 	# feat_importances.nlargest(30).plot(kind='barh')
 	# plt.show()
@@ -134,6 +147,8 @@ def lassoFSelect(df, cv=5, alphas=[.1]):
 	cols = df.columns[keep].insert(len(keep), "target")
 	print("removed ... ", str(c-len(keep))+ " features")	
 
+	mlflow.log_param("FEATURE SELECTION-LASSO removed features", (c-len(keep)))
+
 	return cols
 
 
@@ -148,4 +163,7 @@ def recursiveFElimination(df):
 	rfecv.fit(X, y)
 	print('Optimal number of features ... {}'.format(rfecv.n_features_))
 	cols = X.columns[rfecv.support_].insert(len(X), "target")
+
+	mlflow.log_param("FEATURE SELECTION-RECURSIVE selected features", rfecv.n_features_)
+
 	return cols
