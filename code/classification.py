@@ -30,7 +30,7 @@ def split(train,test):
 	print("\n")
 	print("train classes ", sorted(Counter(y_train).items()))
 	print("test classes ", sorted(Counter(y_test).items()))
-	mlflow.log_param("train classes", sorted(Counter(y_train).items()))
+
 	mlflow.log_param("test classes", sorted(Counter(y_test).items()))
 
 	return X_train, y_train, X_test, y_test

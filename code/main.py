@@ -1,27 +1,15 @@
-import sys, os
-import numpy as np
-
-from feature_selection import (recursiveFElimination, lassoFSelect,
-								 read_data, 
-								 lowMeanElimination, lowVarianceElimination)
-from oversampling import randomOverSampling, SMOTEOverSampling
-
-from classification import svm, decision_tree, feedForwardNN
-
+import os
+from feature_selection import read_data
+from experiments import exp1
 import mlflow
 
 
-def main():
-
-	DIR = './kFold'
-
+def executeExpinFold(DIR ,experiment_name, experiment_f):
+	mlflow.set_experiment(DIR+", "+experiment_name)
 	n_files = int(len(os.listdir(DIR))/2) 
-
-	mlflow.set_experiment(DIR+", SMOTE, lowVarianceElimination + lassoFSelect, NN")
 
 	for i in range(n_files):
 		with mlflow.start_run():
-			
 			mlflow.log_param("fold", i)
 
 			print("\n______________________________fold %s_______________________________\n" %str(i))
@@ -29,15 +17,14 @@ def main():
 			train = read_data("./kFold/train_"+str(i)+".txt")
 			test = read_data("./kFold/test_"+str(i)+".txt")
 
-			over_sampled_train = SMOTEOverSampling(train)
+			experiment_f(train, test)
+			
 
-			keep = lowVarianceElimination(over_sampled_train, .99)
-			keep = lassoFSelect(over_sampled_train[keep])
-			
-			train = over_sampled_train[keep]
-			test = test[keep]
-			
-			feedForwardNN(train,test, lossF='cosine')
+
+def main():
+	executeExpinFold("./kFold" ,"experiment_name", exp1)
+	# exp1("./kFold")
+
 
 
 # after the run of the script, lunch 'mlflow ui' command 
