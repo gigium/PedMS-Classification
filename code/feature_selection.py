@@ -24,6 +24,7 @@ def read_data(file_name):
 
 #preliminar step
 def lowMeanElimination(df, mean_tresh):
+	print("\n")
 	print("lowMeanElimination ... mean = ", mean_tresh)
 	r, c = df.shape
 	keep = (df > 0).mean() > mean_tresh
@@ -35,6 +36,7 @@ def lowMeanElimination(df, mean_tresh):
 
 #preliminar step
 def lowVarianceElimination(df, var_tresh):
+	print("\n")
 	print("lowVarianceElimination ... var = ", var_tresh)
 	r, c = df.shape
 
@@ -68,6 +70,7 @@ def correlationFElimination(df, c):
 
 
 def univariateFSelect(df ,k, score_func=chi2):
+	print("\n")
 	print("univariateFSelect ... extracting ", str(k) + " feaures")
 	print("score function ", score_func.__name__)
 
@@ -92,6 +95,7 @@ def univariateFSelect(df ,k, score_func=chi2):
 
 
 def decisionTreeFSelect(df ,k):
+	print("\n")
 	print("decisionTreeFSelect ... extracting ", str(k) + " feaures")
 
 	X = df.iloc[:,:-1]  
@@ -111,6 +115,7 @@ def decisionTreeFSelect(df ,k):
 
 # https://stats.stackexchange.com/questions/367155/why-lasso-for-feature-selection
 def lassoFSelect(df, cv=5, alphas=[.1]):
+	print("\n")
 	print("lassoFSelect ...")
 
 	X = df.iloc[:,:-1]  
@@ -134,6 +139,7 @@ def lassoFSelect(df, cv=5, alphas=[.1]):
 
 
 def recursiveFElimination(df):
+	print("\n")
 	print("recursiveFElimination ... ")
 	X = df.iloc[:,:-1]  
 	y = df.iloc[:,-1]  	

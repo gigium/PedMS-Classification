@@ -5,13 +5,9 @@ from feature_selection import (recursiveFElimination, lassoFSelect,
 								 read_data, 
 								 lowMeanElimination, lowVarianceElimination)
 from oversampling import randomOverSampling, SMOTEOverSampling
-from classification import svm, decision_tree
 
+from classification import svm, decision_tree, feedForwardNN
 
-from sklearn import  linear_model
-from sklearn.metrics import mean_squared_error, r2_score
-
-from collections import Counter
 import mlflow
 
 
@@ -34,9 +30,8 @@ def main():
 		
 		train = over_sampled_train[keep]
 		test = test[keep]
-		print("test classes ", sorted(Counter(test["target"]).items()))
 		
-		svm(train,test)
+		feedForwardNN(train,test, lossF='cosine')
 
 
 # after the run of the script, lunch 'mlflow ui' command 

@@ -3,11 +3,12 @@ import pandas as pd
 
 from feature_selection import read_data
 
+from keras.models import Sequential
+from keras.layers import Dense
 
 from sklearn import svm
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
-
 
 from sklearn.metrics import (accuracy_score, f1_score, precision_score, 
 								recall_score, classification_report, 
@@ -17,16 +18,20 @@ import mlflow
 
 import warnings
 
+from collections import Counter
+
+
 
 def split(train,test):
-
 	y_train=train.iloc[:,-1]
 	X_train=train.iloc[:,:-1]
-
 	y_test=test.iloc[:,-1]
 	X_test=test.iloc[:,:-1]
-
+	print("\n")
+	print("train classes ", sorted(Counter(y_train).items()))
+	print("test classes ", sorted(Counter(y_test).items()))
 	return X_train, y_train, X_test, y_test
+
 
 
 def reporter(y_test,y_pred):
@@ -41,7 +46,9 @@ def reporter(y_test,y_pred):
 	return report
 	
 
+
 def svm(train,test,kernel='rbf'):
+	print("\n")
 	print("svm ... ")
 	print("kernel function : ", kernel)
 
@@ -51,13 +58,13 @@ def svm(train,test,kernel='rbf'):
 	svclassifier.fit(X_train, y_train)
 
 	y_pred = svclassifier.predict(X_test)
-	
 	report = reporter(y_test,y_pred)
-
 	print(report)
 
 
+
 def decision_tree(train,test):
+	print("\n")
 	print("decision_tree ... ")
 
 	X_train, y_train, X_test, y_test = split(train,test)
@@ -70,5 +77,40 @@ def decision_tree(train,test):
 	report = reporter(y_test,y_pred)
 	print(report)
 
+
+
+def feedForwardNN(train, test,
+					 layer1=64, layer2=1, 
+					 activation1='relu', 
+					 activation2='sigmoid',
+					 lossF='mean_squared_error',
+					 optimizerF='rmsprop',
+					 metrics=['accuracy'],
+					 epochs=20):
+
+	print("\n")
+	print("feedForwardNN ... ")
+
+	print("loss function : ", lossF)
+	print("optimizer function : ", optimizerF)
+
+	X_train, y_train, X_test, y_test = split(train,test)
+
+	model = Sequential() 
+	model.add(Dense(layer1, input_dim=len(X_train.columns), activation=activation1)) 
+	model.add(Dense(layer2, activation=activation2)) 
+
+	model.compile(loss=lossF,
+	              optimizer=optimizerF,
+	              metrics=metrics)
+
+	model.fit(X_train, y_train,
+	          epochs=epochs,
+	          verbose=0)
+
+	y_pred = model.predict(X_test)
+
+	report = reporter(y_test.to_numpy(), y_pred.flatten())
+	print(report)
 
 
