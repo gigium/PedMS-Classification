@@ -54,7 +54,7 @@ def lowVarianceElimination(df, var_tresh):
 	print("removed ... ", str(c-len(keep))+ " features")
 
 	mlflow.log_param("FEATURE SELECTION-LOW VARIANCE variance treshold", var_tresh)
-	mlflow.log_param("FEATURE SELECTION-LOW VARIANCE removed features", (c-len(keep)))
+	mlflow.log_metric("FEATURE SELECTION-LOW VARIANCE removed features", (c-len(keep)))
 	return cols
 
 

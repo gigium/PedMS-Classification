@@ -1,6 +1,6 @@
 import os
 from feature_selection import read_data
-from experiments import exp1
+from experiments import choose_variance_treshold
 import mlflow
 
 
@@ -9,21 +9,18 @@ def executeExpinFold(DIR ,experiment_name, experiment_f):
 	n_files = int(len(os.listdir(DIR))/2) 
 
 	for i in range(n_files):
-		with mlflow.start_run():
-			mlflow.log_param("fold", i)
-
+		with mlflow.start_run(run_name=experiment_name + " fold " + str(i)):
 			print("\n______________________________fold %s_______________________________\n" %str(i))
 
 			train = read_data("./kFold/train_"+str(i)+".txt")
 			test = read_data("./kFold/test_"+str(i)+".txt")
 
-			experiment_f(train, test)
-			
+			experiment_f(train, test, i)
+
 
 
 def main():
-	executeExpinFold("./kFold" ,"experiment_name", exp1)
-	# exp1("./kFold")
+	executeExpinFold("./kFold" ,"randomOverSampling, lowVarianceElimination, SVM", choose_variance_treshold)
 
 
 
