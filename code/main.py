@@ -8,6 +8,8 @@ from oversampling import randomOverSampling, SMOTEOverSampling
 
 from classification import svm, decision_tree, feedForwardNN
 
+from standardization import Standardization, MinMaxScaler
+
 import mlflow
 
 
@@ -28,6 +30,10 @@ def main():
 
 			train = read_data("./kFold/train_"+str(i)+".txt")
 			test = read_data("./kFold/test_"+str(i)+".txt")
+
+			standard_train = Standardization(train)
+			minmax_train = MinMaxScaler(train)
+
 
 			over_sampled_train = SMOTEOverSampling(train)
 
