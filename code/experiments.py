@@ -16,17 +16,17 @@ def choose_variance_treshold(train_, test_, fold):
 		# mlflow.set_tag("variance treshold", treshold)
 
 		train, test = train_, test_
-		with mlflow.start_run(run_name="variance treshold " + str(treshold), nested=True):
-			mlflow.log_param("fold", fold)
+		# with mlflow.start_run(run_name="variance treshold " + str(treshold), nested=True):
+		mlflow.log_param("fold", fold)
 
-			over_sampled_train = randomOverSampling(train)
-			
-			keep = lowVarianceElimination(over_sampled_train, treshold)
+		over_sampled_train = randomOverSampling(train)
+		
+		keep = lowVarianceElimination(over_sampled_train, treshold)
 
-			# keep = lassoFSelect(over_sampled_train[keep])
-			
-			train = over_sampled_train[keep]
-			test = test[keep]
-			
-			svm(train,test)
-			treshold+=.1
+		# keep = lassoFSelect(over_sampled_train[keep])
+		
+		train = over_sampled_train[keep]
+		test = test[keep]
+		
+		svm(train,test)
+		treshold+=.1
