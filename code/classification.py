@@ -3,8 +3,8 @@ import pandas as pd
 
 from feature_selection import read_data
 
-from keras.models import Sequential
-from keras.layers import Dense
+#from keras.models import Sequential
+#from keras.layers import Dense
 
 from sklearn import svm
 from sklearn.svm import SVC
@@ -49,6 +49,7 @@ def reporter(y_test,y_pred):
 		mlflow.log_metric("f1", f1_score(y_test, y_pred, average="macro"))
 		mlflow.log_metric("precision", precision_score(y_test, y_pred, average="macro"))
 		mlflow.log_metric("recall", recall_score(y_test, y_pred, average="macro"))
+		
 	return report
 	
 
@@ -66,7 +67,8 @@ def svm(train,test,kernel='rbf'):
 	svclassifier.fit(X_train, y_train)
 
 	y_pred = svclassifier.predict(X_test)
-	report = reporter(y_test,y_pred)
+	report = reporter(y_test.to_numpy(),y_pred)
+
 	print(report)
 
 

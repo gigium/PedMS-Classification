@@ -18,6 +18,7 @@ def Standardization(data):
 	final_data = pd.DataFrame(data=std_X)
 	final_data.columns = columns
 	final_data.index = indexes
+	final_data['target'] = target
 
 	return final_data
 
@@ -36,6 +37,8 @@ def MinMaxScaler(data, min_value=0, max_value=1):
 	final_data = pd.DataFrame(data=minmax_X)
 	final_data.columns = columns
 	final_data.index = indexes
+	final_data['target'] = target
+
 	
 	return final_data
 

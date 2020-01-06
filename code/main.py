@@ -1,6 +1,6 @@
 import os, sys
 from feature_selection import read_data
-from experiments import choose_variance_treshold
+from experiments import choose_variance_treshold, svmKernel_RO_LVE_S_SVM
 import mlflow
 
 
@@ -14,14 +14,15 @@ def executeExpinFold(DIR ,experiment_name, experiment_f):
 
 			train = read_data(DIR+"/train_"+str(i)+".txt")
 			test = read_data(DIR+"/test_"+str(i)+".txt")
+			mlflow.log_param("fold", i)
 
-			experiment_f(train, test, i)
+			experiment_f(train, test)
 
 
 
 def main():
 	DIR = sys.argv[1]
-	executeExpinFold(DIR ,"randomOverSampling, lowVarianceElimination, SVM", choose_variance_treshold)
+	executeExpinFold(DIR ,"svmKernel_RO_LVE_S_SVM", svmKernel_RO_LVE_S_SVM)
 
 
 
