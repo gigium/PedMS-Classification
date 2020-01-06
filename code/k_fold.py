@@ -24,6 +24,7 @@ def leaveOneOut(df):
 	}
 	
 	for train_index, test_index in loo.split(X, y):
+		print("loo sizes", len(train_index), len(test_index))
 		split["train"].append(train_index)
 		split["test"].append(test_index)
 	

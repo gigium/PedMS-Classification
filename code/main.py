@@ -1,55 +1,34 @@
-import sys, os
-import numpy as np
-
-from feature_selection import (recursiveFElimination, lassoFSelect,
-								 read_data, 
-								 lowMeanElimination, lowVarianceElimination)
-from oversampling import randomOverSampling, SMOTEOverSampling
-
-from classification import svm, decision_tree, feedForwardNN
-
-from standardization import Standardization, MinMaxScaler
-
+import os, sys
+from feature_selection import read_data
+from experiments import choose_variance_treshold
 import mlflow
 
 
-def main():
-
-	DIR = './kFold'
-
+def executeExpinFold(DIR ,experiment_name, experiment_f):
+	mlflow.set_experiment(DIR+", "+experiment_name)
 	n_files = int(len(os.listdir(DIR))/2) 
 
-	mlflow.set_experiment(DIR+", SMOTE, lowVarianceElimination + lassoFSelect, NN")
-
 	for i in range(n_files):
-		with mlflow.start_run():
-			
-			mlflow.log_param("fold", i)
-
+		with mlflow.start_run(run_name=experiment_name + " fold " + str(i)):
 			print("\n______________________________fold %s_______________________________\n" %str(i))
 
-			train = read_data("./kFold/train_"+str(i)+".txt")
-			test = read_data("./kFold/test_"+str(i)+".txt")
+			train = read_data(DIR+"/train_"+str(i)+".txt")
+			test = read_data(DIR+"/test_"+str(i)+".txt")
 
-			standard_train = Standardization(train)
-			minmax_train = MinMaxScaler(train)
+			experiment_f(train, test, i)
 
 
-			over_sampled_train = SMOTEOverSampling(train)
 
-			keep = lowVarianceElimination(over_sampled_train, .99)
-			keep = lassoFSelect(over_sampled_train[keep])
-			
-			train = over_sampled_train[keep]
-			test = test[keep]
-			
-			feedForwardNN(train,test, lossF='cosine')
+def main():
+	DIR = sys.argv[1]
+	executeExpinFold(DIR ,"randomOverSampling, lowVarianceElimination, SVM", choose_variance_treshold)
+
 
 
 # after the run of the script, lunch 'mlflow ui' command 
 # and go 'to http://localhost:5000' to see the ui
 
 
-# python main.py
+# python main.py .\kFold
 if __name__== "__main__":
 	main()

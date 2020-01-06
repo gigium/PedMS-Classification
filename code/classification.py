@@ -30,7 +30,7 @@ def split(train,test):
 	print("\n")
 	print("train classes ", sorted(Counter(y_train).items()))
 	print("test classes ", sorted(Counter(y_test).items()))
-	mlflow.log_param("train classes", sorted(Counter(y_train).items()))
+
 	mlflow.log_param("test classes", sorted(Counter(y_test).items()))
 
 	return X_train, y_train, X_test, y_test
@@ -38,6 +38,9 @@ def split(train,test):
 
 
 def reporter(y_test,y_pred):
+	print("_____________________________________________________________________\n")	
+	print("test: ", y_test, "\npred: ", y_pred)
+	print("_____________________________________________________________________\n")
 	with warnings.catch_warnings():
 		# ignore all caught warnings
 		warnings.filterwarnings("ignore")
@@ -117,8 +120,7 @@ def feedForwardNN(train, test,
 	          verbose=0)
 
 	y_pred = model.predict(X_test)
-
-	report = reporter(y_test.to_numpy(), y_pred.flatten())
+	report = reporter(y_test.to_numpy(), y_pred.flatten().astype(int))
 	print(report)
 
 
