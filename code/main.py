@@ -1,4 +1,4 @@
-import os
+import os, sys
 from feature_selection import read_data
 from experiments import choose_variance_treshold
 import mlflow
@@ -12,15 +12,16 @@ def executeExpinFold(DIR ,experiment_name, experiment_f):
 		with mlflow.start_run(run_name=experiment_name + " fold " + str(i)):
 			print("\n______________________________fold %s_______________________________\n" %str(i))
 
-			train = read_data("./kFold/train_"+str(i)+".txt")
-			test = read_data("./kFold/test_"+str(i)+".txt")
+			train = read_data(DIR+"/train_"+str(i)+".txt")
+			test = read_data(DIR+"/test_"+str(i)+".txt")
 
 			experiment_f(train, test, i)
 
 
 
 def main():
-	executeExpinFold("./kFold" ,"randomOverSampling, lowVarianceElimination, SVM", choose_variance_treshold)
+	DIR = sys.argv[1]
+	executeExpinFold(DIR ,"randomOverSampling, lowVarianceElimination, SVM", choose_variance_treshold)
 
 
 
@@ -28,6 +29,6 @@ def main():
 # and go 'to http://localhost:5000' to see the ui
 
 
-# python main.py
+# python main.py .\kFold
 if __name__== "__main__":
 	main()
