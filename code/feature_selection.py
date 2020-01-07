@@ -35,7 +35,7 @@ def lowMeanElimination(df, mean_tresh):
 	print("removed ... ", str(c-len(cols))+ " features")
 
 	mlflow.log_param("FEATURE SELECTION-LOW MEAN mean treshold", mean_tresh)
-	mlflow.log_metric("FEATURE SELECTION-LOW MEAN removed features", (c-len(cols)))
+	mlflow.log_param("FEATURE SELECTION-LOW MEAN removed features", (c-len(cols)))
 	return cols
 	
 
@@ -54,7 +54,7 @@ def lowVarianceElimination(df, var_tresh):
 	print("removed ... ", str(c-len(keep))+ " features")
 
 	mlflow.log_param("FEATURE SELECTION-LOW VARIANCE variance treshold", var_tresh)
-	mlflow.log_metric("FEATURE SELECTION-LOW VARIANCE removed features", (c-len(keep)))
+	mlflow.log_param("FEATURE SELECTION-LOW VARIANCE removed features", (c-len(keep)))
 	return cols
 
 
@@ -147,7 +147,7 @@ def lassoFSelect(df, cv=5, alphas=[.1]):
 	cols = df.columns[keep].insert(len(keep), "target")
 	print("removed ... ", str(c-len(keep))+ " features")	
 
-	mlflow.log_metric("FEATURE SELECTION-LASSO removed features", (c-len(keep)))
+	mlflow.log_param("FEATURE SELECTION-LASSO removed features", (c-len(keep)))
 
 	return cols
 
@@ -164,6 +164,6 @@ def recursiveFElimination(df):
 	print('Optimal number of features ... {}'.format(rfecv.n_features_))
 	cols = X.columns[rfecv.support_].insert(len(X), "target")
 
-	mlflow.log_metric("FEATURE SELECTION-RECURSIVE selected features", rfecv.n_features_)
+	mlflow.log_param("FEATURE SELECTION-RECURSIVE selected features", rfecv.n_features_)
 
 	return cols

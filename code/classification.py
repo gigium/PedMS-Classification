@@ -3,8 +3,8 @@ import pandas as pd
 
 from feature_selection import read_data
 
-#from keras.models import Sequential
-#from keras.layers import Dense
+from keras.models import Sequential
+from keras.layers import Dense
 
 from sklearn import svm
 from sklearn.svm import SVC
@@ -31,7 +31,7 @@ def split(train,test):
 	print("train classes ", sorted(Counter(y_train).items()))
 	print("test classes ", sorted(Counter(y_test).items()))
 
-	mlflow.log_param("test classes", sorted(Counter(y_test).items()))
+	# mlflow.log_param("test classes", sorted(Counter(y_test).items()))
 
 	return X_train, y_train, X_test, y_test
 
@@ -40,17 +40,20 @@ def split(train,test):
 def reporter(y_test,y_pred):
 	print("_____________________________________________________________________\n")	
 	print("test: ", y_test, "\npred: ", y_pred)
+	# mlflow.log_param("test", y_test)
+	# mlflow.log_param("pred", y_pred)
 	print("_____________________________________________________________________\n")
 	with warnings.catch_warnings():
 		# ignore all caught warnings
 		warnings.filterwarnings("ignore")
-		report = classification_report(y_test,y_pred)	
-		mlflow.log_metric("accuracy", accuracy_score(y_test, y_pred))
-		mlflow.log_metric("f1", f1_score(y_test, y_pred, average="macro"))
-		mlflow.log_metric("precision", precision_score(y_test, y_pred, average="macro"))
-		mlflow.log_metric("recall", recall_score(y_test, y_pred, average="macro"))
-		
-	return report
+		print(classification_report(y_test,y_pred))	
+		print(confusion_matrix(y_test, y_pred))
+		a = accuracy_score(y_test, y_pred)
+		f = f1_score(y_test, y_pred, average="macro")
+		p = precision_score(y_test, y_pred, average="macro")
+		r = recall_score(y_test, y_pred, average="macro")
+
+	return a,f,p,r
 	
 
 
@@ -67,25 +70,25 @@ def svm(train,test,kernel='rbf'):
 	svclassifier.fit(X_train, y_train)
 
 	y_pred = svclassifier.predict(X_test)
-	report = reporter(y_test.to_numpy(),y_pred)
+	a,f,p,r = reporter(y_test.to_numpy(),y_pred)
 
-	print(report)
+	return a,f,p,r
 
 
 
-def decision_tree(train,test):
+def decision_tree(train,test,criterion):
 	print("\n")
 	print("decision_tree ... ")
 
 	X_train, y_train, X_test, y_test = split(train,test)
 
-	classifier = DecisionTreeClassifier()
+	classifier = DecisionTreeClassifier(criterion=criterion)
 	classifier.fit(X_train, y_train)	
 
 	y_pred = classifier.predict(X_test)
 
-	report = reporter(y_test,y_pred)
-	print(report)
+	a,f,p,r = reporter(y_test,y_pred)
+	return a,f,p,r
 
 
 
@@ -122,7 +125,7 @@ def feedForwardNN(train, test,
 	          verbose=0)
 
 	y_pred = model.predict(X_test)
-	report = reporter(y_test.to_numpy(), y_pred.flatten().astype(int))
-	print(report)
+	a,f,p,r = reporter(y_test.to_numpy(), y_pred.flatten().astype(int))
+	return a, f, p, r
 
 

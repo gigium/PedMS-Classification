@@ -1,28 +1,28 @@
 import os, sys
 from feature_selection import read_data
-from experiments import choose_variance_treshold, svmKernel_RO_LVE_S_SVM
+from experiments import runExperiment, exp_example
 import mlflow
 
 
-def executeExpinFold(DIR ,experiment_name, experiment_f):
-	mlflow.set_experiment(DIR+", "+experiment_name)
-	n_files = int(len(os.listdir(DIR))/2) 
+# def executeExpinFold(DIR ,experiment_name, experiment_f):
+# 	mlflow.set_experiment(DIR+", "+experiment_name)
+# 	n_files = int(len(os.listdir(DIR))/2) 
 
-	for i in range(n_files):
-		with mlflow.start_run(run_name=experiment_name + " fold " + str(i)):
-			print("\n______________________________fold %s_______________________________\n" %str(i))
+# 	for i in range(n_files):
+# 		with mlflow.start_run(run_name=experiment_name + " fold " + str(i)):
+# 			print("\n______________________________fold %s_______________________________\n" %str(i))
 
-			train = read_data(DIR+"/train_"+str(i)+".txt")
-			test = read_data(DIR+"/test_"+str(i)+".txt")
-			mlflow.log_param("fold", i)
+# 			train = read_data(DIR+"/train_"+str(i)+".txt")
+# 			test = read_data(DIR+"/test_"+str(i)+".txt")
 
-			experiment_f(train, test)
+# 			experiment_f(train, test, i)
 
 
 
 def main():
 	DIR = sys.argv[1]
-	executeExpinFold(DIR ,"svmKernel_RO_LVE_S_SVM", svmKernel_RO_LVE_S_SVM)
+	runExperiment(DIR, exp_example, ["linear", "poly", "rbf", "sigmoid", "precomputed"])
+	# executeExpinFold(DIR , svmKernel_SM_LVE_S_SVM.__name__, svmKernel_SM_LVE_S_SVM)
 
 
 
