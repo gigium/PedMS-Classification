@@ -62,21 +62,21 @@ def lowVarianceElimination(df, var_tresh):
 def correlationFElimination(df, c=.8):
 	X = df.iloc[:,:-1]  
 	correlation_matrix = X.corr()
-	correlated_features = set()	
+	nfc = set()	
 
 	for i in range(len(correlation_matrix.columns)):
-		print(i, "/", len(correlation_matrix.columns))
 		for j in range(i):
-			if abs(correlation_matrix.iloc[i, j]) > c:
+			if abs(correlation_matrix.iloc[i, j]) < c:
 				colname = correlation_matrix.columns[i]
-				correlated_features.add(colname)
+				nfc.add(colname)
+
 
 	print("\n")
-	print("correlationFElimination ... extracting ", len(correlated_features) + " feaures")
-	mlflow.log_metric("FEATURE SELECTION-CORRELATION extracted features", len(correlated_features))
-
-	correlated_features.add("target")
-	return correlated_features
+	print("correlationFElimination ... extracting ", str(len(nfc)) + " feaures")
+	mlflow.log_metric("FEATURE SELECTION-CORRELATION extracted features", len(nfc))
+	nfc_list = list(nfc)
+	nfc_list.append("target")
+	return nfc_list
 
 
 
@@ -166,8 +166,10 @@ def recursiveFElimination(df):
 	rfecv = RFECV(estimator=rfc, step=1, cv=StratifiedKFold(5), scoring='accuracy')
 	rfecv.fit(X, y)
 	print('Optimal number of features ... {}'.format(rfecv.n_features_))
-	cols = X.columns[rfecv.support_].insert(len(X), "target")
+	cols = X.columns[rfecv.support_]
 
 	mlflow.log_metric("FEATURE SELECTION-RECURSIVE selected features", rfecv.n_features_)
+	keep = list(cols)
+	keep.append("target")
 
-	return cols
+	return keep
