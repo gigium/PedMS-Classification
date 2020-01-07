@@ -57,6 +57,39 @@ def random_forest_depth_exp_SM_LV_ST_RF(train, test, max_depth):
 	test = Standardization(test[keep])
 	return randomForest(train, test, max_depth=max_depth)
 
+'''
+Does the **performance** change on "uni-variate selection" and "decision tree" 
+using "variance elimination" (using SVM accuracy)
+
+low variance -> uni variate (change variance threshold)
+low variance -> decision tree (change variance threshold)
+'''
+
+
+def experiment3_0_1(train, test, k):
+	over_sampled_train = SMOTEOverSampling(train)
+	keep = lowVarianceElimination(over_sampled_train,0.8)
+	keep = univariateFSelect(keep,k)	
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(over_sampled_train[keep])
+	return svm(train,test)
+
+
+
+
+def experiment3_0_2(train, test, k):
+	over_sampled_train = SMOTEOverSampling(train)
+	keep = lowVarianceElimination(over_sampled_train,0.8)
+	keep = decisionTreeFSelect(keep,k)	
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(over_sampled_train[keep])
+	return svm(train,test)
+
+
+
+
+
+
 
 
 def experiment4(train, test, variance):
