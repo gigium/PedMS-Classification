@@ -15,7 +15,7 @@ def randomOverSampling(df):
 	print("from ... ", sorted(Counter(df["target"]).items()))
 	print("to ... ", sorted(Counter(y_resampled).items()))
 
-	mlflow.log_param("OVERSAMPLING-RANDOM classes resampled", sorted(Counter(y_resampled).items()))
+	# mlflow.log_param("OVERSAMPLING-RANDOM classes resampled", sorted(Counter(y_resampled).items()))
 
 	return X_resampled 
 
@@ -32,6 +32,6 @@ def SMOTEOverSampling(df, neighbors=2):
 	print("from ... ", sorted(Counter(df["target"]).items()))
 	print("to ... ", sorted(Counter(y_resampled).items()))
 
-	mlflow.log_param("OVERSAMPLING-SMOTE classes resampled", sorted(Counter(y_resampled).items()))
+	# mlflow.log_param("OVERSAMPLING-SMOTE classes resampled", sorted(Counter(y_resampled).items()))
 
 	return X_resampled 

@@ -1,6 +1,6 @@
 import os, sys
 from feature_selection import read_data
-from experiments import runExperiment, exp_example
+from experiments import runExperiment, random_forest_depth_exp_SM_LV_ST_RF
 import mlflow
 
 
@@ -21,7 +21,7 @@ import mlflow
 
 def main():
 	DIR = sys.argv[1]
-	runExperiment(DIR, exp_example, [3, 5, 7, 11])
+	runExperiment(DIR, random_forest_depth_exp_SM_LV_ST_RF, [3, 5, 7, 11])
 	# executeExpinFold(DIR , svmKernel_SM_LVE_S_SVM.__name__, svmKernel_SM_LVE_S_SVM)
 
 
