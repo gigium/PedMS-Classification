@@ -1,6 +1,7 @@
 from oversampling import randomOverSampling, SMOTEOverSampling
-from feature_selection import (univariateFSelect,decisionTreeFSelect,recursiveFElimination, lassoFSelect,
-								 lowMeanElimination, lowVarianceElimination, read_data)
+from feature_selection import (univariateFSelect,decisionTreeFSelect,recursiveFElimination, 
+								lassoFSelect, univariateFSelect,
+								lowMeanElimination, lowVarianceElimination, read_data)
 from classification import svm, decision_tree, randomForest
 from standardization import Standardization, MinMaxScaler
 
@@ -68,24 +69,29 @@ low variance -> decision tree (change variance threshold)
 
 def experiment3_0_1(train, test, k):
 	over_sampled_train = SMOTEOverSampling(train)
+
 	keep = lowVarianceElimination(over_sampled_train,0.8)
-	keep = univariateFSelect(keep,k)	
+	keep = univariateFSelect(over_sampled_train[keep],k)	
+
 	train = Standardization(over_sampled_train[keep])
-	test = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+
 	return svm(train,test)
+
 
 
 
 
 def experiment3_0_2(train, test, k):
 	over_sampled_train = SMOTEOverSampling(train)
-	keep = lowVarianceElimination(over_sampled_train,0.8)
-	keep = decisionTreeFSelect(keep,k)	
+
+	keep = lowVarianceElimination(over_sampled_train, 0.8)
+	keep = decisionTreeFSelect(over_sampled_train[keep], k)	
+
 	train = Standardization(over_sampled_train[keep])
-	test = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+
 	return svm(train,test)
-
-
 
 
 
@@ -104,18 +110,24 @@ def experiment4(train, test, variance):
 
 def experiment2_1(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
-	keep = univariateFSelect(over_sampled_train, variance)
+
+	keep = univariateFSelect(over_sampled_train, 1000)
 	keep = f(over_sampled_train[keep])
+
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
+
 	return svm(train, test)
 
 
 
 def experiment2_2(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
-	keep = decisionTreeFSelect(over_sampled_train, variance)
+
+	keep = decisionTreeFSelect(over_sampled_train, 1000)
 	keep = f(over_sampled_train[keep])
+
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
+
 	return svm(train, test)

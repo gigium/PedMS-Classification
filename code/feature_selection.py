@@ -59,7 +59,7 @@ def lowVarianceElimination(df, var_tresh):
 
 
 
-def correlationFElimination(df, c):
+def correlationFElimination(df, c=.8):
 	X = df.iloc[:,:-1]  
 	correlation_matrix = X.corr()
 	correlated_features = set()	
@@ -70,6 +70,10 @@ def correlationFElimination(df, c):
 			if abs(correlation_matrix.iloc[i, j]) > c:
 				colname = correlation_matrix.columns[i]
 				correlated_features.add(colname)
+
+	print("\n")
+	print("correlationFElimination ... extracting ", len(correlated_features) + " feaures")
+	mlflow.log_metric("FEATURE SELECTION-CORRELATION extracted features", len(correlated_features))
 
 	correlated_features.add("target")
 	return correlated_features
