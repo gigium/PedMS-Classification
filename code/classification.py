@@ -20,6 +20,8 @@ import warnings
 
 from collections import Counter
 
+from sklearn.ensemble import RandomForestClassifier
+
 
 
 def split(train,test):
@@ -127,5 +129,24 @@ def feedForwardNN(train, test,
 	y_pred = model.predict(X_test)
 	a,f,p,r = reporter(y_test.to_numpy(), y_pred.flatten().astype(int))
 	return a, f, p, r
+
+
+def randomForest(train, test, max_depth=3, random_state=0):
+	print("\n")
+	print("randomForest ... ")
+	print("max_depth : ", max_depth)
+
+	mlflow.log_param("CLASSIFICATION-randomForest max_depth", max_depth)
+
+	X_train, y_train, X_test, y_test = split(train,test)
+
+	classifier = RandomForestClassifier(max_depth=3, random_state=0)
+	classifier.fit(X_train, y_train)
+	
+	y_pred = classifier.predict(X_test)
+	a,f,p,r = reporter(y_test.to_numpy(),y_pred)
+
+	return a,f,p,r
+
 
 
