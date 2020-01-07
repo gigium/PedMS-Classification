@@ -26,8 +26,8 @@ def getFold(DIR):
 
 
 
-def runExperiment(DIR, _exp, run_arg):
-	mlflow.set_experiment(DIR+" "+_exp.__name__)
+def runExperiment(DIR, _exp, run_arg, experiment_name=""):
+	mlflow.set_experiment(DIR+" "+_exp.__name__+experiment_name)
 	fold = getFold(DIR)
 
 	for arg in run_arg:
@@ -58,15 +58,8 @@ def random_forest_depth_exp_SM_LV_ST_RF(train, test, max_depth):
 	test = Standardization(test[keep])
 	return randomForest(train, test, max_depth=max_depth)
 
-'''
-Does the **performance** change on "uni-variate selection" and "decision tree" 
-using "variance elimination" (using SVM accuracy)
 
-low variance -> uni variate (change variance threshold)
-low variance -> decision tree (change variance threshold)
-'''
-
-
+#best k=1000
 def experiment3_0_1(train, test, k):
 	over_sampled_train = SMOTEOverSampling(train)
 
@@ -81,7 +74,7 @@ def experiment3_0_1(train, test, k):
 
 
 
-
+#best k=1000
 def experiment3_0_2(train, test, k):
 	over_sampled_train = SMOTEOverSampling(train)
 
@@ -95,6 +88,31 @@ def experiment3_0_2(train, test, k):
 
 
 
+# variance [0.1, 0.3, 0.5, 0.7, 0.8, 0.9, 0.95, 0.99] no difference
+def experiment3_1(train, test, variance):
+	over_sampled_train = SMOTEOverSampling(train)
+
+	keep = lowVarianceElimination(over_sampled_train, variance)
+	keep = univariateFSelect(over_sampled_train[keep],1000)
+
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+
+	return svm(train,test)
+
+
+
+# variance [0.1, 0.3, 0.5, 0.7, 0.8, 0.9, 0.95, 0.99] best 0.8 with accurcy 0.7
+def experiment3_2(train, test, variance):
+	over_sampled_train = SMOTEOverSampling(train)
+
+	keep = lowVarianceElimination(over_sampled_train, variance)
+	keep = decisionTreeFSelect(over_sampled_train[keep],1000)
+
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+
+	return svm(train,test)
 
 
 

@@ -7,7 +7,7 @@ import mlflow
 
 def main():
 	DIR = sys.argv[1]
-	runExperiment(DIR, experiment2_1, [lassoFSelect, recursiveFElimination])
+	runExperiment(DIR, experiment3_2, [0.1, 0.3, 0.5, 0.7, 0.8, 0.9, 0.95, 0.99])
 
 
 # python main.py .\kFold
