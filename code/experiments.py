@@ -1,5 +1,5 @@
 from oversampling import randomOverSampling, SMOTEOverSampling
-from feature_selection import (recursiveFElimination, lassoFSelect,
+from feature_selection import (univariateFSelect,decisionTreeFSelect,recursiveFElimination, lassoFSelect,
 								 lowMeanElimination, lowVarianceElimination, read_data)
 from classification import svm, decision_tree, randomForest
 from standardization import Standardization, MinMaxScaler
@@ -26,7 +26,7 @@ def getFold(DIR):
 
 
 def runExperiment(DIR, _exp, run_arg):
-	mlflow.set_experiment(DIR+"_nome esperimento 2_")
+	mlflow.set_experiment(DIR+" "+_exp.__name__)
 	fold = getFold(DIR)
 
 	for arg in run_arg:
@@ -51,7 +51,6 @@ def runExperiment(DIR, _exp, run_arg):
 
 
 def random_forest_depth_exp_SM_LV_ST_RF(train, test, max_depth):
-	# pre_processing
 	over_sampled_train = SMOTEOverSampling(train)
 	keep = lowVarianceElimination(over_sampled_train, 0.8)
 	train = Standardization(over_sampled_train[keep])
@@ -60,3 +59,30 @@ def random_forest_depth_exp_SM_LV_ST_RF(train, test, max_depth):
 
 
 
+def experiment4(train, test, variance):
+	over_sampled_train = SMOTEOverSampling(train)
+	keep = lowVarianceElimination(over_sampled_train, variance)
+	keep = lassoFSelect(over_sampled_train[keep])
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+	return svm(train, test)
+
+
+
+def experiment2_1(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+	keep = univariateFSelect(over_sampled_train, variance)
+	keep = f(over_sampled_train[keep])
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+	return svm(train, test)
+
+
+
+def experiment2_2(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+	keep = decisionTreeFSelect(over_sampled_train, variance)
+	keep = f(over_sampled_train[keep])
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+	return svm(train, test)
