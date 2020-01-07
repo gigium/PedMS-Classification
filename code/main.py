@@ -21,7 +21,7 @@ import mlflow
 
 def main():
 	DIR = sys.argv[1]
-	runExperiment(DIR, exp_example, ["linear", "poly", "rbf", "sigmoid", "precomputed"])
+	runExperiment(DIR, exp_example, [3, 5, 7, 11])
 	# executeExpinFold(DIR , svmKernel_SM_LVE_S_SVM.__name__, svmKernel_SM_LVE_S_SVM)
 
 

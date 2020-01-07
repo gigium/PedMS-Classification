@@ -1,7 +1,7 @@
 from oversampling import randomOverSampling, SMOTEOverSampling
 from feature_selection import (recursiveFElimination, lassoFSelect,
 								 lowMeanElimination, lowVarianceElimination, read_data)
-from classification import svm, decision_tree
+from classification import svm, decision_tree, randomForest
 from standardization import Standardization, MinMaxScaler
 
 import mlflow
@@ -50,13 +50,13 @@ def runExperiment(DIR, _exp, run_arg):
 
 
 
-def exp_example(train, test, kernel):
+def random_forest_depth_exp_SM_LV_ST_RF(train, test, max_depth):
 	# pre_processing
-	over_sampled_train = randomOverSampling(train)
+	over_sampled_train = SMOTEOverSampling(train)
 	keep = lowVarianceElimination(over_sampled_train, 0.8)
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
-	return svm(train,test,kernel)
+	return randomForest(train, test, max_depth=max_depth)
 
 
 
