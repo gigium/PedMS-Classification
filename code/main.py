@@ -1,6 +1,7 @@
 import os, sys
 from feature_selection import read_data
-from experiments import runExperiment, experiment3_0_1, experiment3_0_2, experiment2_1, experiment2_2, experiment1, experiment3_1, experiment3_2, experiment4
+from experiments import (runExperiment, experiment3_0_1, experiment3_0_2, experiment2_1, experiment2_2, experiment1, experiment3_1, experiment3_2, 
+						experiment4, experiment5)
 from feature_selection import (correlationFElimination, lassoFSelect, recursiveFElimination, 
 								lowMeanElimination, lowVarianceElimination, univariateFSelect, 
 								decisionTreeFSelect)
@@ -9,6 +10,7 @@ import mlflow
 
 def main():
 	DIR = sys.argv[1]
+	runExperiment(DIR, experiment5, [lowMeanElimination, lowVarianceElimination, univariateFSelect, decisionTreeFSelect, lassoFSelect])
 
 	# runExperiment(DIR, experiment1, [lowMeanElimination, lowVarianceElimination, univariateFSelect, decisionTreeFSelect, lassoFSelect])
 

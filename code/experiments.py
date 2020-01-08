@@ -59,6 +59,25 @@ def random_forest_depth_exp_SM_LV_ST_RF(train, test, max_depth):
 	return randomForest(train, test, max_depth=max_depth)
 
 
+
+
+def experiment5(train,test,f):
+	over_sampled_train = SMOTEOverSampling(train)
+
+	keep = f(over_sampled_train)
+		
+
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+
+
+	return randomForest(train,test)
+
+
+
+
+
+
 #best k=1000
 def experiment3_0_1(train, test, k):
 	over_sampled_train = SMOTEOverSampling(train)
