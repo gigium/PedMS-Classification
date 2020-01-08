@@ -2,7 +2,7 @@ from oversampling import randomOverSampling, SMOTEOverSampling
 from feature_selection import (univariateFSelect,decisionTreeFSelect,recursiveFElimination, 
 								lassoFSelect, univariateFSelect,
 								lowMeanElimination, lowVarianceElimination, read_data)
-from classification import svm, decision_tree, randomForest
+from classification import svm, decision_tree, randomForest, feedForwardNN
 from standardization import Standardization, MinMaxScaler
 
 import mlflow
@@ -161,3 +161,15 @@ def experiment1(train, test, f):
 	test = Standardization(test[keep])
 
 	return svm(train, test)
+
+
+
+def experiment7(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+
+	keep = f(over_sampled_train)
+
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+
+	return feedForwardNN(train, test)

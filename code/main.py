@@ -1,6 +1,6 @@
 import os, sys
 from feature_selection import read_data
-from experiments import runExperiment, experiment3_0_1, experiment3_0_2, experiment2_1, experiment2_2, experiment1, experiment3_1, experiment3_2, experiment4
+from experiments import (runExperiment, experiment3_0_1, experiment3_0_2, experiment2_1, experiment2_2, experiment1, experiment3_1, experiment3_2, experiment4, experiment7)
 from feature_selection import (correlationFElimination, lassoFSelect, recursiveFElimination, 
 								lowMeanElimination, lowVarianceElimination, univariateFSelect, 
 								decisionTreeFSelect)
@@ -26,6 +26,9 @@ def main():
 	# runExperiment(DIR, experiment3_2, [.1, .3, .5, .7, .8, .9, .95, .99])
 
 	# runExperiment(DIR, experiment4, [.1, .3, .5, .7, .8, .9, .95, .99])
+
+
+	runExperiment(DIR, experiment7, [lassoFSelect, univariateFSelect, lowVarianceElimination, lowMeanElimination, decisionTreeFSelect])
 
 
 # python main.py .\kFold

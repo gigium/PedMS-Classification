@@ -98,8 +98,8 @@ def feedForwardNN(train, test,
 					 layer1=32, layer2=32, 
 					 activation1='relu', 
 					 activation2='sigmoid',
-					 lossF='mean_squared_error',
-					 optimizerF='rmsprop',
+					 lossF='categorical_crossentropy',
+					 optimizerF='sgd',
 					 metrics=['accuracy'],
 					 epochs=20):
 
@@ -122,18 +122,29 @@ def feedForwardNN(train, test,
 
 	model = Sequential() 
 	model.add(Dense(layer1, input_dim=len(X_train.columns), activation=activation1)) 
-	model.add(Dense(layer2, activation=activation2)) 
+	model.add(Dense(layer2, activation=activation1)) 
+	model.add(Dense(3, activation=activation2)) 
 
 	model.compile(loss=lossF,
 	              optimizer=optimizerF,
 	              metrics=metrics)
+	
+	y_train_one_hot = np.zeros((y_train.size, y_train.max()+1))
+	y_train_one_hot[np.arange(y_train.size),y_train] = 1
 
-	model.fit(X_train, y_train,
+
+
+	model.fit(X_train, y_train_one_hot,
 	          epochs=epochs,
 	          verbose=0)
 
-	y_pred = model.predict(X_test)
-	a,f,p,r = reporter(y_test.to_numpy(), y_pred.flatten().astype(int))
+	y_pred = model.predict(X_test).tolist()
+	cat_pred = []
+	for i in range (len(y_pred)):
+		cat_pred.append(np.asarray(y_pred[i]).argmax()) # integers)
+
+	print(cat_pred, y_pred)
+	a,f,p,r = reporter(y_test, cat_pred)
 	return a, f, p, r
 
 
