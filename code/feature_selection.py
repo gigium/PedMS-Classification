@@ -25,7 +25,7 @@ def read_data(file_name):
 
 
 #preliminar step
-def lowMeanElimination(df, mean_tresh):
+def lowMeanElimination(df, mean_tresh=.8):
 	print("\n")
 	print("lowMeanElimination ... mean = ", mean_tresh)
 	r, c = df.shape
@@ -40,7 +40,7 @@ def lowMeanElimination(df, mean_tresh):
 	
 
 #preliminar step
-def lowVarianceElimination(df, var_tresh):
+def lowVarianceElimination(df, var_tresh=.8):
 	print("\n")
 	print("lowVarianceElimination ... var = ", var_tresh)
 	r, c = df.shape
@@ -80,7 +80,7 @@ def correlationFElimination(df, c=.8):
 
 
 
-def univariateFSelect(df ,k, score_func=chi2):
+def univariateFSelect(df ,k=1000, score_func=chi2):
 	print("\n")
 	print("univariateFSelect ... extracting ", str(k) + " feaures")
 	print("score function ", score_func.__name__)
@@ -110,7 +110,7 @@ def univariateFSelect(df ,k, score_func=chi2):
 
 
 
-def decisionTreeFSelect(df ,k):
+def decisionTreeFSelect(df ,k=1000):
 	print("\n")
 	print("decisionTreeFSelect ... extracting ", str(k) + " feaures")
 

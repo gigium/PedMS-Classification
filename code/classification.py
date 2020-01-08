@@ -95,7 +95,7 @@ def decision_tree(train,test,criterion):
 
 
 def feedForwardNN(train, test,
-					 layer1=64, layer2=1, 
+					 layer1=32, layer2=32, 
 					 activation1='relu', 
 					 activation2='sigmoid',
 					 lossF='mean_squared_error',
@@ -108,9 +108,15 @@ def feedForwardNN(train, test,
 
 	print("loss function : ", lossF)
 	print("optimizer function : ", optimizerF)
+	print("CLASSIFICATION-NN layers", [layer1, layer2])
+	print("CLASSIFICATION-NN optimizer function", optimizerF)
+	print("CLASSIFICATION-NN epochs", epochs)
 
 	mlflow.log_param("CLASSIFICATION-NN loss function", lossF)
 	mlflow.log_param("CLASSIFICATION-NN optimizer function", optimizerF)
+	mlflow.log_param("CLASSIFICATION-NN layers", [layer1, layer2])
+	mlflow.log_param("CLASSIFICATION-NN optimizer function", optimizerF)
+	mlflow.log_param("CLASSIFICATION-NN epochs", epochs)
 
 	X_train, y_train, X_test, y_test = split(train,test)
 
@@ -129,6 +135,7 @@ def feedForwardNN(train, test,
 	y_pred = model.predict(X_test)
 	a,f,p,r = reporter(y_test.to_numpy(), y_pred.flatten().astype(int))
 	return a, f, p, r
+
 
 
 def randomForest(train, test, max_depth=3, random_state=0):

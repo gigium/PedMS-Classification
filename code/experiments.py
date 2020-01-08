@@ -149,3 +149,15 @@ def experiment2_2(train, test, f):
 	test = Standardization(test[keep])
 
 	return svm(train, test)
+
+
+
+def experiment1(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+
+	keep = f(over_sampled_train)
+
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+
+	return svm(train, test)
