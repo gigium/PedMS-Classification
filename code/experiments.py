@@ -68,6 +68,69 @@ def neuralNet_epoch_exp_SM_LV_ST_NN(train, test, epochs):
 
 
 
+
+
+def experiment8(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+	keep = univariateFSelect(over_sampled_train)
+	keep = f(over_sampled_train[keep])
+
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+
+	return feedForwardNN(train, test)
+
+
+
+def experiment8_1(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+	keep = decisionTreeFSelect(over_sampled_train)
+	keep = f(over_sampled_train[keep])
+
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+
+	return feedForwardNN(train, test)
+
+
+
+def experiment7(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+
+	keep = f(over_sampled_train)
+
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+
+	return feedForwardNN(train, test)
+
+
+
+def experiment6(train,test,f):
+	over_sampled_train = SMOTEOverSampling(train)
+	
+	keep = univariateFSelect(over_sampled_train)
+	keep = f(over_sampled_train[keep])
+
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+
+	return randomForest(train,test)
+
+
+
+def experiment6_1(train,test,f):
+	over_sampled_train = SMOTEOverSampling(train)
+
+	keep = decisionTreeFSelect(over_sampled_train)
+	keep = f(over_sampled_train[keep])
+
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+
+	return randomForest(train,test)
+
+
 def experiment5(train,test,f):
 	over_sampled_train = SMOTEOverSampling(train)
 
@@ -184,36 +247,3 @@ def experiment1(train, test, f):
 
 
 
-def experiment7(train, test, f):
-	over_sampled_train = SMOTEOverSampling(train)
-
-	keep = f(over_sampled_train)
-
-	train = Standardization(over_sampled_train[keep])
-	test = Standardization(test[keep])
-
-	return feedForwardNN(train, test)
-
-
-
-def experiment8(train, test, f):
-	over_sampled_train = SMOTEOverSampling(train)
-	keep = univariateFSelect(over_sampled_train)
-	keep = f(over_sampled_train[keep])
-
-	train = Standardization(over_sampled_train[keep])
-	test = Standardization(test[keep])
-
-	return feedForwardNN(train, test)
-
-
-
-def experiment8_1(train, test, f):
-	over_sampled_train = SMOTEOverSampling(train)
-	keep = randomForest(over_sampled_train)
-	keep = f(over_sampled_train[keep])
-
-	train = Standardization(over_sampled_train[keep])
-	test = Standardization(test[keep])
-
-	return feedForwardNN(train, test)
