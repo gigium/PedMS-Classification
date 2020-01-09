@@ -1,7 +1,9 @@
 import os, sys
 from feature_selection import read_data
+from experiments import neuralNet_epoch_exp_SM_LV_ST_NN
 from experiments import (runExperiment, experiment3_0_1, experiment3_0_2, experiment2_1, experiment2_2, experiment1, experiment3_1,
-						experiment5, experiment3_2, experiment4, experiment7)
+						experiment5, experiment3_2, experiment4, experiment7, experiment8, experiment8_1)
+
 from feature_selection import (correlationFElimination, lassoFSelect, recursiveFElimination, 
 								lowMeanElimination, lowVarianceElimination, univariateFSelect, 
 								decisionTreeFSelect)
@@ -29,9 +31,13 @@ def main():
 
 	# runExperiment(DIR, experiment4, [.1, .3, .5, .7, .8, .9, .95, .99])
 
-	runExperiment(DIR, experiment5, [lowMeanElimination, lowVarianceElimination, univariateFSelect, decisionTreeFSelect, lassoFSelect])
-	runExperiment(DIR, experiment7, [lassoFSelect, univariateFSelect, lowVarianceElimination, lowMeanElimination, decisionTreeFSelect])
+	# runExperiment(DIR, experiment5, [lowMeanElimination, lowVarianceElimination, univariateFSelect, decisionTreeFSelect, lassoFSelect])
 
+	runExperiment(DIR, experiment7, [lassoFSelect, univariateFSelect, lowVarianceElimination, lowMeanElimination, decisionTreeFSelect])
+	# runExperiment(DIR, experiment8, [lassoFSelect, correlationFElimination, recursiveFElimination])
+	# runExperiment(DIR, experiment8_1, [lassoFSelect, correlationFElimination, recursiveFElimination])
+
+	# runExperiment(DIR, neuralNet_epoch_exp_SM_LV_ST_NN, [5, 10, 20, 30, 40, 50, 60, 70, 80, 90], "_1")
 
 # python main.py .\kFold
 if __name__== "__main__":

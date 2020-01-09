@@ -101,7 +101,7 @@ def feedForwardNN(train, test,
 					 lossF='categorical_crossentropy',
 					 optimizerF='sgd',
 					 metrics=['accuracy'],
-					 epochs=20):
+					 epochs=40):
 
 	print("\n")
 	print("feedForwardNN ... ")
@@ -143,8 +143,7 @@ def feedForwardNN(train, test,
 	for i in range (len(y_pred)):
 		cat_pred.append(np.asarray(y_pred[i]).argmax()) # integers)
 
-	print(cat_pred, y_pred)
-	a,f,p,r = reporter(y_test, cat_pred)
+	a,f,p,r = reporter(y_test.tolist(), cat_pred)
 	return a, f, p, r
 
 

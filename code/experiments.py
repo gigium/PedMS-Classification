@@ -59,23 +59,24 @@ def random_forest_depth_exp_SM_LV_ST_RF(train, test, max_depth):
 	return randomForest(train, test, max_depth=max_depth)
 
 
+def neuralNet_epoch_exp_SM_LV_ST_NN(train, test, epochs):
+	over_sampled_train = SMOTEOverSampling(train)
+	keep = lowVarianceElimination(over_sampled_train, 0.8)
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+	return feedForwardNN(train, test, epochs=epochs)
+
 
 
 def experiment5(train,test,f):
 	over_sampled_train = SMOTEOverSampling(train)
 
 	keep = f(over_sampled_train)
-		
 
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
 
-
 	return randomForest(train,test)
-
-
-
-
 
 
 #best k=1000
@@ -187,6 +188,30 @@ def experiment7(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
 
 	keep = f(over_sampled_train)
+
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+
+	return feedForwardNN(train, test)
+
+
+
+def experiment8(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+	keep = univariateFSelect(over_sampled_train)
+	keep = f(over_sampled_train[keep])
+
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+
+	return feedForwardNN(train, test)
+
+
+
+def experiment8_1(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+	keep = randomForest(over_sampled_train)
+	keep = f(over_sampled_train[keep])
 
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])

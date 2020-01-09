@@ -80,7 +80,7 @@ def correlationFElimination(df, c=.8):
 
 
 
-def univariateFSelect(df ,k=1000, score_func=chi2):
+def univariateFSelect(df ,k=500, score_func=chi2):
 	print("\n")
 	print("univariateFSelect ... extracting ", str(k) + " feaures")
 	print("score function ", score_func.__name__)
@@ -110,7 +110,7 @@ def univariateFSelect(df ,k=1000, score_func=chi2):
 
 
 
-def decisionTreeFSelect(df ,k=1000):
+def decisionTreeFSelect(df ,k=500):
 	print("\n")
 	print("decisionTreeFSelect ... extracting ", str(k) + " feaures")
 
