@@ -4,19 +4,22 @@ from experiments import neuralNet_epoch_exp_SM_LV_ST_NN, random_forest_depth_exp
 from experiments import (runExperiment, experiment3_0_1, experiment3_0_2, experiment2_1, experiment2, experiment1, experiment3_1,
 						experiment5, experiment6, experiment6_1, experiment3_2, experiment4, experiment7, experiment8, experiment8_1,
 						experiment9, experiment10, experiment10_1,
-
+						experiment11, experiment12, experiment12_1,
 						experiment13, experiment14, experiment14_1)
 
 from feature_selection import (correlationFElimination, lassoFSelect, recursiveFElimination, 
 								lowMeanElimination, lowVarianceElimination, univariateFSelect, 
 								decisionTreeFSelect)
+
+from sklearn.feature_selection import chi2 , f_classif,  mutual_info_classif
+
 import mlflow
 
 
 def main():
 	DIR = sys.argv[1]
 	
-
+	#runExperiment(DIR, univariate_function_exp_SM_UFS_ST_SVM, [f_classif, chi2,  mutual_info_classif],"univariate_score_func" )
 	# runExperiment(DIR, experiment1, [lowMeanElimination, lowVarianceElimination, univariateFSelect, decisionTreeFSelect, lassoFSelect])
 
 	# runExperiment(DIR, experiment2_1, [correlationFElimination, lassoFSelect])
@@ -45,6 +48,11 @@ def main():
 	# runExperiment(DIR, experiment9, [lassoFSelect, univariateFSelect, lowVarianceElimination, lowMeanElimination, decisionTreeFSelect])
 	# runExperiment(DIR, experiment10, [lassoFSelect, correlationFElimination, recursiveFElimination])
 	# runExperiment(DIR, experiment10_1, [lassoFSelect, correlationFElimination, recursiveFElimination])
+	
+	# runExperiment(DIR, experiment11, [lassoFSelect, univariateFSelect, lowVarianceElimination, lowMeanElimination, decisionTreeFSelect])
+	#runExperiment(DIR, experiment12, [lassoFSelect, correlationFElimination, recursiveFElimination])
+	runExperiment(DIR, experiment12_1, [lassoFSelect, correlationFElimination, recursiveFElimination])
+
 
 	# runExperiment(DIR, experiment13, [lassoFSelect, univariateFSelect, lowVarianceElimination, lowMeanElimination, decisionTreeFSelect])
 	runExperiment(DIR, experiment14, [lassoFSelect, correlationFElimination, recursiveFElimination])
@@ -52,7 +60,6 @@ def main():
 
 	# runExperiment(DIR, neuralNet_epoch_exp_SM_LV_ST_NN, [5, 10, 20, 30, 40, 50, 60, 70, 80, 90], "_1")
 	# runExperiment(DIR, random_forest_depth_exp_SM_LV_ST_RF, [1, 3, 5, 7, 10, 20, 30])
-
 
 
 
