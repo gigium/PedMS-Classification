@@ -68,6 +68,78 @@ def neuralNet_epoch_exp_SM_LV_ST_NN(train, test, epochs):
 
 
 
+def experiment14(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+
+	keep = univariateFSelect(over_sampled_train)
+	keep = f(over_sampled_train[keep])
+
+	train = over_sampled_train[keep]
+	test = test[keep]
+
+	return feedForwardNN(train, test)
+
+
+
+def experiment14_1(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+
+	keep = decisionTreeFSelect(over_sampled_train)
+	keep = f(over_sampled_train[keep])
+
+	train = over_sampled_train[keep]
+	test = test[keep]
+
+	return feedForwardNN(train, test)
+
+
+
+def experiment13(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+
+	keep = f(over_sampled_train)
+
+	train = over_sampled_train[keep]
+	test = test[keep]
+	return feedForwardNN(train, test)
+
+
+
+
+def experiment10(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+
+	keep = univariateFSelect(over_sampled_train)
+	keep = f(over_sampled_train[keep])
+
+	train = over_sampled_train[keep]
+	test = test[keep]
+
+	return svm(train, test)
+
+
+
+def experiment10_1(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+
+	keep = decisionTreeFSelect(over_sampled_train)
+	keep = f(over_sampled_train[keep])
+
+	train = over_sampled_train[keep]
+	test = test[keep]
+
+	return svm(train, test)
+
+
+
+def experiment9(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+
+	keep = f(over_sampled_train)
+
+	train = over_sampled_train[keep]
+	test = test[keep]
+	return svm(train, test)
 
 
 def experiment8(train, test, f):
@@ -209,7 +281,7 @@ def experiment4(train, test, variance):
 
 
 
-def experiment2_1(train, test, f):
+def experiment2(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
 
 	keep = univariateFSelect(over_sampled_train, 1000)
@@ -222,7 +294,7 @@ def experiment2_1(train, test, f):
 
 
 
-def experiment2_2(train, test, f):
+def experiment2_1(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
 
 	keep = decisionTreeFSelect(over_sampled_train, 1000)

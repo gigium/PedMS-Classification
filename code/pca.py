@@ -6,12 +6,6 @@ from sklearn.decomposition import PCA
 
 
 
-def read_data(file_name):
-    df = pd.read_csv(file_name, sep="\t", index_col=0)
-    return df
-
-
-
 def _PCA(df, COMPONENTS=47):
     x, y = df.iloc[:,:-1], df.iloc[:, -1] 
     X = pd.DataFrame(StandardScaler().fit_transform(x))
@@ -33,11 +27,11 @@ def _PCA(df, COMPONENTS=47):
     
 
 
-def main():
-    data = read_data(sys.argv[1])
-    _PCA(data).to_csv(sys.argv[2], sep="\t")
+# def main():
+#     data = read_data(sys.argv[1])
+#     _PCA(data).to_csv(sys.argv[2], sep="\t")
 
  
-# python pca.py .\data\new_data.txt .\data\pca_data.txt
-if __name__== "__main__":
-  main()
+# # python pca.py .\data\new_data.txt .\data\pca_data.txt
+# if __name__== "__main__":
+#   main()
