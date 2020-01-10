@@ -7,7 +7,7 @@ from sklearn.linear_model import LassoCV
 from sklearn.feature_selection import SelectFromModel
 
 from sklearn.feature_selection import SelectKBest
-from sklearn.feature_selection import chi2
+from sklearn.feature_selection import chi2 , f_classif,  mutual_info_classif
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import StratifiedKFold

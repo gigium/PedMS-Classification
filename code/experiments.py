@@ -67,7 +67,12 @@ def neuralNet_epoch_exp_SM_LV_ST_NN(train, test, epochs):
 	return feedForwardNN(train, test, epochs=epochs)
 
 
-
+def univariate_function_exp_SM_UFS_ST_SVM(train, test, score_function):
+	over_sampled_train = SMOTEOverSampling(train)
+	keep = univariateFSelect(over_sampled_train, score_func=score_function)
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+	return svm(train, test)
 
 
 def experiment8(train, test, f):
@@ -247,3 +252,30 @@ def experiment1(train, test, f):
 
 
 
+def experiment11(train,test,f):
+	over_sampled_train = SMOTEOverSampling(train)
+
+	keep = f(over_sampled_train)
+
+	return randomForest(over_sampled_train[keep],test[keep])
+
+
+
+
+def experiment12(train,test,f):
+	over_sampled_train = SMOTEOverSampling(train)
+
+	keep = univariateFSelect(over_sampled_train)
+	keep = f(over_sampled_train[keep])
+
+	return randomForest(over_sampled_train[keep],test[keep])
+
+
+
+def experiment12_1(train,test,f):
+	over_sampled_train = SMOTEOverSampling(train)
+
+	keep = decisionTreeFSelect(over_sampled_train)
+	keep = f(over_sampled_train[keep])
+
+	return randomForest(over_sampled_train[keep],test[keep])	
