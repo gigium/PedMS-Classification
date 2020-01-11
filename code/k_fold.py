@@ -82,7 +82,10 @@ def main():
 	if sys.argv[2] == "stratified":
 		k=int(sys.argv[3])
 		split=stratifiedKfold(data,k)
-		createFolder(data, split)
+		if sys.argv[4]:
+			createFolder(data, split, path=sys.argv[4])
+		else:
+			createFolder(data, split)
 
 	elif sys.argv[2] == "loo":
 		split=leaveOneOut(data)

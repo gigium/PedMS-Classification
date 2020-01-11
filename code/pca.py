@@ -18,11 +18,8 @@ def _PCA(df, COMPONENTS=47):
         columns.append("PC"+str(i+1))
 
     principalDf = pd.DataFrame(data = principalComponents, columns=columns)
-    l = list(range(1, len(principalDf.columns)+1))
-    principalDf["index"] = l
-    principalDf.set_index("index", inplace=True)
 
-    principalDf["target"] = y
+    principalDf["target"] = y.tolist()
     return principalDf
     
 

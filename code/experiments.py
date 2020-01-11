@@ -2,9 +2,11 @@ from oversampling import randomOverSampling, SMOTEOverSampling
 from feature_selection import (univariateFSelect,decisionTreeFSelect,recursiveFElimination, 
 								lassoFSelect, univariateFSelect,
 								lowMeanElimination, lowVarianceElimination, read_data)
-from classification import svm, decision_tree, randomForest, feedForwardNN
+from classification import svm, decision_tree, randomForest, feedForwardNN, randomForest_neuralNet_svm
 from standardization import Standardization, MinMaxScaler
 
+from pca import _PCA
+import pandas
 import mlflow
 import numpy as np
 import os
@@ -31,6 +33,7 @@ def runExperiment(DIR, _exp, run_arg, experiment_name=""):
 	fold = getFold(DIR)
 
 	for arg in run_arg:
+
 		with mlflow.start_run(run_name="argument " + str(arg), nested=True):
 
 			results = {"accuracy":[],"f1":[],"precision":[],"recall":[],}
@@ -59,6 +62,7 @@ def random_forest_depth_exp_SM_LV_ST_RF(train, test, max_depth):
 	return randomForest(train, test, max_depth=max_depth)
 
 
+
 def neuralNet_epoch_exp_SM_LV_ST_NN(train, test, epochs):
 	over_sampled_train = SMOTEOverSampling(train)
 	keep = lowVarianceElimination(over_sampled_train, 0.8)
@@ -77,37 +81,64 @@ def univariate_function_exp_SM_UFS_ST_SVM(train, test, score_function):
 
 
 
+def pca_n_components_exp(train, test, components):
+	over_sampled_train = SMOTEOverSampling(train)
+	keep = lowVarianceElimination(over_sampled_train, 0.8)
+	train = _PCA(over_sampled_train[keep], components)
+	test = _PCA(test[keep], components)
+	return svm(train, test)
+
+
+
+def majority_vote_exp(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+	keep = f(over_sampled_train)
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+	return randomForest_neuralNet_svm(train, test)
+
+def majority_vote_exp_1(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+	keep = univariateFSelect(over_sampled_train)	
+	keep = f(over_sampled_train[keep])
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+	return randomForest_neuralNet_svm(train, test)
+
+
+def majority_vote_exp_2(train, test, f):
+	over_sampled_train = SMOTEOverSampling(train)
+	keep = univariateFSelect(over_sampled_train)
+
+	keep = f(over_sampled_train[keep])
+	train = Standardization(over_sampled_train[keep])
+	test = Standardization(test[keep])
+	return randomForest_neuralNet_svm(train, test)
+
+
 def experiment14(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = univariateFSelect(over_sampled_train)
 	keep = f(over_sampled_train[keep])
-
 	train = over_sampled_train[keep]
 	test = test[keep]
-
 	return feedForwardNN(train, test)
 
 
 
 def experiment14_1(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = decisionTreeFSelect(over_sampled_train)
 	keep = f(over_sampled_train[keep])
-
 	train = over_sampled_train[keep]
 	test = test[keep]
-
 	return feedForwardNN(train, test)
 
 
 
 def experiment13(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = f(over_sampled_train)
-
 	train = over_sampled_train[keep]
 	test = test[keep]
 	return feedForwardNN(train, test)
@@ -116,9 +147,7 @@ def experiment13(train, test, f):
 
 def experiment11(train,test,f):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = f(over_sampled_train)
-
 	return randomForest(over_sampled_train[keep],test[keep])
 
 
@@ -126,55 +155,43 @@ def experiment11(train,test,f):
 
 def experiment12(train,test,f):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = univariateFSelect(over_sampled_train)
 	keep = f(over_sampled_train[keep])
-
 	return randomForest(over_sampled_train[keep],test[keep])
 
 
 
 def experiment12_1(train,test,f):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = decisionTreeFSelect(over_sampled_train)
 	keep = f(over_sampled_train[keep])
-
 	return randomForest(over_sampled_train[keep],test[keep])	
 
 
 
 def experiment10(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = univariateFSelect(over_sampled_train)
 	keep = f(over_sampled_train[keep])
-
 	train = over_sampled_train[keep]
 	test = test[keep]
-
 	return svm(train, test)
 
 
 
 def experiment10_1(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = decisionTreeFSelect(over_sampled_train)
 	keep = f(over_sampled_train[keep])
-
 	train = over_sampled_train[keep]
 	test = test[keep]
-
 	return svm(train, test)
 
 
 
 def experiment9(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = f(over_sampled_train)
-
 	train = over_sampled_train[keep]
 	test = test[keep]
 	return svm(train, test)
@@ -184,10 +201,8 @@ def experiment8(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
 	keep = univariateFSelect(over_sampled_train)
 	keep = f(over_sampled_train[keep])
-
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
-
 	return feedForwardNN(train, test)
 
 
@@ -196,72 +211,55 @@ def experiment8_1(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
 	keep = decisionTreeFSelect(over_sampled_train)
 	keep = f(over_sampled_train[keep])
-
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
-
 	return feedForwardNN(train, test)
 
 
 
 def experiment7(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = f(over_sampled_train)
-
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
-
 	return feedForwardNN(train, test)
 
 
 
 def experiment6(train,test,f):
 	over_sampled_train = SMOTEOverSampling(train)
-	
 	keep = univariateFSelect(over_sampled_train)
 	keep = f(over_sampled_train[keep])
-
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
-
 	return randomForest(train,test)
 
 
 
 def experiment6_1(train,test,f):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = decisionTreeFSelect(over_sampled_train)
 	keep = f(over_sampled_train[keep])
-
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
-
 	return randomForest(train,test)
 
 
 def experiment5(train,test,f):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = f(over_sampled_train)
-
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
-
 	return randomForest(train,test)
 
 
 #best k=1000
 def experiment3_0_1(train, test, k):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = lowVarianceElimination(over_sampled_train,0.8)
 	keep = univariateFSelect(over_sampled_train[keep],k)	
-
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
-
 	return svm(train,test)
 
 
@@ -270,13 +268,10 @@ def experiment3_0_1(train, test, k):
 #best k=1000
 def experiment3_0_2(train, test, k):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = lowVarianceElimination(over_sampled_train, 0.8)
 	keep = decisionTreeFSelect(over_sampled_train[keep], k)	
-
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
-
 	return svm(train,test)
 
 
@@ -284,13 +279,10 @@ def experiment3_0_2(train, test, k):
 # variance [0.1, 0.3, 0.5, 0.7, 0.8, 0.9, 0.95, 0.99] no difference
 def experiment3_1(train, test, variance):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = lowVarianceElimination(over_sampled_train, variance)
 	keep = univariateFSelect(over_sampled_train[keep],1000)
-
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
-
 	return svm(train,test)
 
 
@@ -298,13 +290,10 @@ def experiment3_1(train, test, variance):
 # variance [0.1, 0.3, 0.5, 0.7, 0.8, 0.9, 0.95, 0.99] best 0.8 with accurcy 0.7
 def experiment3_2(train, test, variance):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = lowVarianceElimination(over_sampled_train, variance)
 	keep = decisionTreeFSelect(over_sampled_train[keep],1000)
-
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
-
 	return svm(train,test)
 
 
@@ -321,38 +310,29 @@ def experiment4(train, test, variance):
 
 def experiment2(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = univariateFSelect(over_sampled_train, 1000)
 	keep = f(over_sampled_train[keep])
-
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
-
 	return svm(train, test)
 
 
 
 def experiment2_1(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = decisionTreeFSelect(over_sampled_train, 1000)
 	keep = f(over_sampled_train[keep])
-
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
-
 	return svm(train, test)
 
 
 
 def experiment1(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
-
 	keep = f(over_sampled_train)
-
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
-
 	return svm(train, test)
 
 

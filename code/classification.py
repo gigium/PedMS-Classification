@@ -21,6 +21,7 @@ import warnings
 from collections import Counter
 
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import VotingClassifier
 
 
 
@@ -41,7 +42,7 @@ def split(train,test):
 
 def reporter(y_test,y_pred):
 	print("_____________________________________________________________________\n")	
-	print("test: ", y_test, "\npred: ", y_pred)
+	print("test:\t", y_test, "\npred:\t", y_pred)
 	# mlflow.log_param("test", y_test)
 	# mlflow.log_param("pred", y_pred)
 	print("_____________________________________________________________________\n")
@@ -161,9 +162,87 @@ def randomForest(train, test, max_depth=3, random_state=0):
 	classifier.fit(X_train, y_train)
 	
 	y_pred = classifier.predict(X_test)
-	a,f,p,r = reporter(y_test.to_numpy(),y_pred)
+	a,f,p,r = reporter(y_test.tolist(),y_pred)
 
 	return a,f,p,r
 
 
 
+def randomForest_neuralNet_svm(train, test):
+	X_train, y_train, X_test, y_test = split(train,test)
+
+	RFclass = RandomForestClassifier(max_depth=3, random_state=0)
+	RFclass.fit(X_train, y_train)
+	y_pred_forest = RFclass.predict(X_test)
+
+
+
+	SVCclass = SVC(kernel='rbf')
+	SVCclass.fit(X_train, y_train)
+
+	y_pred_svm = SVCclass.predict(X_test)
+
+
+
+	NNet = Sequential() 
+	NNet.add(Dense(32, input_dim=len(X_train.columns), activation='relu')) 
+	NNet.add(Dense(32, activation='relu')) 
+	NNet.add(Dense(3, activation='sigmoid')) 
+
+	NNet.compile(loss='categorical_crossentropy',
+	              optimizer='sgd',
+	              metrics=['accuracy'])
+	
+	y_train_one_hot = np.zeros((y_train.size, y_train.max()+1))
+	y_train_one_hot[np.arange(y_train.size),y_train] = 1
+
+	NNet.fit(X_train, y_train_one_hot,
+	          epochs=40,
+	          verbose=0)
+
+	y_pred = NNet.predict(X_test).tolist()
+	y_pred_net = []
+	for i in range (len(y_pred)):
+		y_pred_net.append(np.asarray(y_pred[i]).argmax()) # integers)
+
+
+	# model = VotingClassifier(estimators=[('rf', RFclass), ('svm', SVCclass), ('nnet', NNet)], voting='hard')
+	# model.fit(X_train,y_train)
+	# model.score(X_test,y_test)
+	# majority_vote = model.predict(X_test)
+	majority_vote =[]
+	for i in range (len(y_pred_net)):
+		# majority_vote.append(int(round((y_pred_net[i]+y_pred_svm[i]+y_pred_forest[i])/3)))
+		if y_pred_net[i] == y_pred_svm[i] == y_pred_forest[i]:
+			majority_vote.append(y_pred_net[i])
+
+		# elif y_pred_svm[i]==0: 
+		# 	majority_vote.append(y_pred_svm[i])
+
+		elif y_pred_net[i] == y_pred_svm[i]:
+			majority_vote.append(y_pred_net[i])
+
+		elif y_pred_net[i] == y_pred_forest[i]:
+			majority_vote.append(y_pred_net[i])
+
+		# elif y_pred_net[i]==1: 
+		# 	majority_vote.append(y_pred_net[i])
+
+		# elif y_pred_svm[i] == y_pred_forest[i]:
+		# 	majority_vote.append(y_pred_svm[i])
+
+		# elif y_pred_forest[i]==1:
+		# 	majority_vote.append(y_pred_forest[i])
+
+		# elif y_pred_svm[i]==0:
+		# 	majority_vote.append(y_pred_net[i])
+
+		else:
+			majority_vote.append(y_pred_forest[i])
+
+	print("\nnnet\t",y_pred_net)
+	print("svm\t",y_pred_svm.tolist())
+	print("forest\t",y_pred_forest.tolist())
+	a,f,p,r = reporter(y_test.tolist(),majority_vote)
+
+	return a,f,p,r
