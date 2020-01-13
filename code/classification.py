@@ -53,8 +53,8 @@ def reporter(y_test,y_pred):
 		print(confusion_matrix(y_test, y_pred))
 		a = accuracy_score(y_test, y_pred)
 		f = f1_score(y_test, y_pred, average="macro")
-		p = precision_score(y_test, y_pred, average="macro")
-		r = recall_score(y_test, y_pred, average="macro")
+		p = precision_score(y_test, y_pred,  average=None)
+		r = recall_score(y_test, y_pred, average=None)
 
 	return a,f,p,r
 	
@@ -205,37 +205,16 @@ def randomForest_neuralNet_svm(train, test):
 	for i in range (len(y_pred)):
 		y_pred_net.append(np.asarray(y_pred[i]).argmax()) # integers)
 
-
-	# model = VotingClassifier(estimators=[('rf', RFclass), ('svm', SVCclass), ('nnet', NNet)], voting='hard')
-	# model.fit(X_train,y_train)
-	# model.score(X_test,y_test)
-	# majority_vote = model.predict(X_test)
 	majority_vote =[]
 	for i in range (len(y_pred_net)):
-		# majority_vote.append(int(round((y_pred_net[i]+y_pred_svm[i]+y_pred_forest[i])/3)))
 		if y_pred_net[i] == y_pred_svm[i] == y_pred_forest[i]:
 			majority_vote.append(y_pred_net[i])
-
-		# elif y_pred_svm[i]==0: 
-		# 	majority_vote.append(y_pred_svm[i])
 
 		elif y_pred_net[i] == y_pred_svm[i]:
 			majority_vote.append(y_pred_net[i])
 
 		elif y_pred_net[i] == y_pred_forest[i]:
 			majority_vote.append(y_pred_net[i])
-
-		# elif y_pred_net[i]==1: 
-		# 	majority_vote.append(y_pred_net[i])
-
-		# elif y_pred_svm[i] == y_pred_forest[i]:
-		# 	majority_vote.append(y_pred_svm[i])
-
-		# elif y_pred_forest[i]==1:
-		# 	majority_vote.append(y_pred_forest[i])
-
-		# elif y_pred_svm[i]==0:
-		# 	majority_vote.append(y_pred_net[i])
 
 		else:
 			majority_vote.append(y_pred_forest[i])

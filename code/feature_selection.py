@@ -38,9 +38,10 @@ def lowMeanElimination(df, mean_tresh=.8):
 	mlflow.log_metric("FEATURE SELECTION-LOW MEAN removed features", (c-len(cols)))
 	return cols
 	
+	
 
 #preliminar step
-def lowVarianceElimination(df, var_tresh=.8):
+def lowVarianceElimination(df, var_tresh=20):
 	print("\n")
 	print("lowVarianceElimination ... var = ", var_tresh)
 	r, c = df.shape

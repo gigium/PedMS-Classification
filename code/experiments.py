@@ -46,10 +46,18 @@ def runExperiment(DIR, _exp, run_arg, experiment_name=""):
 				results["precision"].append(p)
 				results["recall"].append(r)
 
+			precision = np.mean(results["precision"], axis=0)
+			recall = np.mean(results["recall"], axis=0)
 			mlflow.log_metric("accuracy", np.mean(results["accuracy"]))
 			mlflow.log_metric("f1",  np.mean(results["f1"]))
-			mlflow.log_metric("precision", np.mean(results["precision"]))
-			mlflow.log_metric("recall", np.mean(results["recall"]))
+
+			mlflow.log_metric("precision_class0", precision[0])
+			mlflow.log_metric("precision_class1", precision[1])
+			mlflow.log_metric("precision_class2", precision[2])
+
+			mlflow.log_metric("recall_class0", recall[0])
+			mlflow.log_metric("recall_class1", recall[1])
+			mlflow.log_metric("recall_class2", recall[2])
 		
 
 
@@ -96,6 +104,7 @@ def majority_vote_exp(train, test, f):
 	train = Standardization(over_sampled_train[keep])
 	test = Standardization(test[keep])
 	return randomForest_neuralNet_svm(train, test)
+
 
 def majority_vote_exp_1(train, test, f):
 	over_sampled_train = SMOTEOverSampling(train)
