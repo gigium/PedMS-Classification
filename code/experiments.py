@@ -346,3 +346,80 @@ def experiment1(train, test, f):
 
 
 
+
+
+def experiment20(train, test, f):
+	keep = univariateFSelect(train)
+	keep = f(train[keep])
+	train = Standardization(train[keep])
+	test = Standardization(test[keep])
+	return feedForwardNN(train, test)
+
+
+
+def experiment20_1(train, test, f):
+	keep = decisionTreeFSelect(train)
+	keep = f(train[keep])
+	train = Standardization(train[keep])
+	test = Standardization(test[keep])
+	return feedForwardNN(train, test)
+
+
+
+def experiment19(train, test, f):
+	keep = f(train)
+	train = Standardization(train[keep])
+	test = Standardization(test[keep])
+	return feedForwardNN(train, test)
+
+
+
+def experiment18(train,test,f):
+	keep = univariateFSelect(train)
+	keep = f(train[keep])
+	train = Standardization(train[keep])
+	test = Standardization(test[keep])
+	return randomForest(train,test)
+
+
+
+def experiment18_1(train,test,f):
+	keep = decisionTreeFSelect(train)
+	keep = f(train[keep])
+	train = Standardization(train[keep])
+	test = Standardization(test[keep])
+	return randomForest(train,test)
+
+
+def experiment17(train,test,f):
+	keep = f(train)
+	train = Standardization(train[keep])
+	test = Standardization(test[keep])
+	return randomForest(train,test)
+
+
+
+
+def experiment16(train, test, f):
+	keep = univariateFSelect(train)
+	keep = f(train[keep])
+	train = Standardization(train[keep])
+	test = Standardization(test[keep])
+	return svm(train, test)
+
+
+
+def experiment16_1(train, test, f):
+	keep = decisionTreeFSelect(train)
+	keep = f(train[keep])
+	train = Standardization(train[keep])
+	test = Standardization(test[keep])
+	return svm(train, test)
+
+
+
+def experiment15(train, test, f):
+	keep = f(train)
+	train = Standardization(train[keep])
+	test = Standardization(test[keep])
+	return svm(train, test)

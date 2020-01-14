@@ -9,6 +9,9 @@ from experiments import (runExperiment, experiment1, experiment2, experiment2_1,
 							experiment9, experiment10, experiment10_1,
 							experiment11, experiment12, experiment12_1,
 							experiment13, experiment14, experiment14_1,
+							experiment15, experiment16, experiment16_1,		
+							experiment17, experiment18, experiment18_1,
+							experiment19, experiment20, experiment20_1,
 							majority_vote_exp, majority_vote_exp_1, majority_vote_exp_2)
 
 from feature_selection import (correlationFElimination, lassoFSelect, recursiveFElimination, 
@@ -71,6 +74,7 @@ def main():
 	# runExperiment(DIR, random_forest_depth_exp_SM_LV_ST_RF, [1, 3, 5, 7, 10, 20, 30])
 	#runExperiment(DIR, univariate_function_exp_SM_UFS_ST_SVM, [f_classif, chi2,  mutual_info_classif],"univariate_score_func" )
 
+
 	for fold in ["kFold3", "kFold5", "kFold7"]:
 		runExperiment(fold, experiment1, [lowVarianceElimination, univariateFSelect], "_final")
 		runExperiment(fold, experiment2, [recursiveFElimination], "_final")
@@ -79,6 +83,21 @@ def main():
 
 		runExperiment(fold, experiment7, [lowVarianceElimination], "_final")
 		runExperiment(fold, experiment8, [lassoFSelect], "_final")
+
+
+	# runExperiment(DIR, experiment15, [lowMeanElimination, lowVarianceElimination, univariateFSelect, decisionTreeFSelect, lassoFSelect])
+
+	# runExperiment(DIR, experiment16, [correlationFElimination, lassoFSelect, recursiveFElimination])
+	# runExperiment(DIR, experiment16_1, [correlationFElimination, lassoFSelect, recursiveFElimination])
+
+	# runExperiment(DIR, experiment17, [lowMeanElimination, lowVarianceElimination, univariateFSelect, decisionTreeFSelect, lassoFSelect])
+	# runExperiment(DIR, experiment18, [lassoFSelect, correlationFElimination, recursiveFElimination])
+	# runExperiment(DIR, experiment18_1, [lassoFSelect, correlationFElimination, recursiveFElimination])
+
+	# runExperiment(DIR, experiment19, [lassoFSelect, univariateFSelect, lowVarianceElimination, lowMeanElimination, decisionTreeFSelect])
+	# runExperiment(DIR, experiment20, [lassoFSelect, correlationFElimination, recursiveFElimination])
+	# runExperiment(DIR, experiment20_1, [lassoFSelect, correlationFElimination, recursiveFElimination])
+
 
 # python main.py .\kFold
 if __name__== "__main__":
